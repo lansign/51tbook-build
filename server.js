@@ -214,8 +214,7 @@ module.exports =
                           data.trackingId = _config.analytics.google.trackingId;
                         }
   
-                        console.log("user", req.user._doc);
-                        _context.next = 8;
+                        _context.next = 7;
                         return (0, _universalRouter.match)(_routes2.default, {
                           path: req.path,
                           query: req.query,
@@ -248,7 +247,7 @@ module.exports =
                           }
                         });
   
-                      case 8:
+                      case 7:
                         success = _context.sent;
   
   
@@ -257,7 +256,7 @@ module.exports =
                           res.send(template(data));
                         }
   
-                      case 10:
+                      case 9:
                       case 'end':
                         return _context.stop();
                     }
