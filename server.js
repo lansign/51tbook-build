@@ -627,21 +627,21 @@ module.exports =
     facebook: {
       id: 'xxx',
       secret: 'xxx',
-      callbackURL: 'http://www.51tbook.com/login/facebook/return'
+      callbackURL: 'http://www.51tbook.com/login/facebook/callback'
     },
   
     // https://cloud.google.com/console/project
     google: {
       id: '209681579571-mksqtt876daqpsa5083mic5bmd1s3967.apps.googleusercontent.com',
       secret: 't_mT4Xf3wDwTHzfJl7PHk-2k',
-      callbackURL: 'http://www.51tbook.com/login/google/return'
+      callbackURL: 'http://www.51tbook.com/login/google/callback'
     },
   
     // https://www.github.com/
     github: {
       id: 'ad75c00803574b188212',
       secret: '2019a0aa9757b674a523bb4334d0ba10d7577daa',
-      callbackURL: 'http://www.51tbook.com/login/github/return'
+      callbackURL: 'http://www.51tbook.com/login/github/callback'
     }
   
   };
