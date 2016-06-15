@@ -1351,7 +1351,7 @@ module.exports =
               if (args.id) {
                   _BookModel2.default.find({ _id: args.id }, callback);
               } else {
-                  _BookModel2.default.find(args.author ? {} : { author: args.author }).where('createTime').lte(args.createTime ? args.createTime : new Date().getTime()).sort({ createTime: -1 }).limit(args.size && args.size > 0 && args.size < 500 ? args.size : 500).exec(callback);
+                  _BookModel2.default.find(args.author ? { author: args.author } : {}).where('createTime').lte(args.createTime ? args.createTime : new Date().getTime()).sort({ createTime: -1 }).limit(args.size && args.size > 0 && args.size < 500 ? args.size : 500).exec(callback);
               }
           });
       }
@@ -4191,6 +4191,12 @@ module.exports =
                   alert("标题不可为空");
                   return;
               }
+              //获取image标签
+              //
+              var imageUrl = void 0;
+              var imgRegex = text.match(/!\[.*?\]\((.*?)\)/);
+              if (imgRegex) imageUrl = imgRegex[1];
+  
               var rx_escapable = /[\\\"\u0000-\u001f\u007f-\u009f\u00ad\u0600-\u0604\u070f\u17b4\u17b5\u200c-\u200f\u2028-\u202f\u2060-\u206f\ufeff\ufff0-\uffff]/g;
               var meta = { // table of character substitutions
                   "\b": "\\b",
@@ -4226,7 +4232,7 @@ module.exports =
                       'Content-Type': 'application/json'
                   },
                   body: (0, _stringify2.default)({
-                      query: 'mutation{article(title: "' + title + '", content: ' + requestText + ') {id}}'
+                      query: 'mutation{article(title: "' + title + '", content: ' + requestText + ', imageUrl:"' + imageUrl + '") {id}}'
                   }),
                   credentials: 'include'
               }).then(function (resp) {
