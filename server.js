@@ -441,7 +441,7 @@ module.exports =
   _passport2.default.use(new _passportFacebook.Strategy({
     clientID: _config.auth.facebook.id,
     clientSecret: _config.auth.facebook.secret,
-    callbackURL: 'http://localhost:3001/login/facebook/return',
+    callbackURL: _config.auth.facebook.callbackURL,
     profileFields: ['name', 'email', 'link', 'locale', 'timezone']
   }, function (accessToken, refreshToken, profile, done) {
     return callback("facebook", accessToken, refreshToken, profile, done);
@@ -450,7 +450,7 @@ module.exports =
   _passport2.default.use(new _passportGithub.Strategy({
     clientID: _config.auth.github.id,
     clientSecret: _config.auth.github.secret,
-    callbackURL: "http://localhost:3001/login/github/callback"
+    callbackURL: _config.auth.github.callbackURL
   }, function (accessToken, refreshToken, profile, done) {
     return callback("github", accessToken, refreshToken, profile, done);
   }));
@@ -458,7 +458,7 @@ module.exports =
   _passport2.default.use(new _passportGoogleOauth.Strategy({
     clientID: _config.auth.google.id,
     clientSecret: _config.auth.google.secret,
-    callbackURL: "http://localhost:3001/login/google/callback"
+    callbackURL: _config.auth.google.callbackURL
   }, function (accessToken, refreshToken, profile, done) {
     return callback("google", accessToken, refreshToken, profile, done);
   }));
@@ -626,19 +626,22 @@ module.exports =
     // https://developers.facebook.com/
     facebook: {
       id: 'xxx',
-      secret: 'xxx'
+      secret: 'xxx',
+      callbackURL: 'http://www.51tbook.com/login/facebook/return'
     },
   
     // https://cloud.google.com/console/project
     google: {
       id: '209681579571-mksqtt876daqpsa5083mic5bmd1s3967.apps.googleusercontent.com',
-      secret: 't_mT4Xf3wDwTHzfJl7PHk-2k'
+      secret: 't_mT4Xf3wDwTHzfJl7PHk-2k',
+      callbackURL: 'http://www.51tbook.com/login/google/return'
     },
   
     // https://www.github.com/
     github: {
       id: 'ad75c00803574b188212',
-      secret: '2019a0aa9757b674a523bb4334d0ba10d7577daa'
+      secret: '2019a0aa9757b674a523bb4334d0ba10d7577daa',
+      callbackURL: 'http://www.51tbook.com/login/github/return'
     }
   
   };
