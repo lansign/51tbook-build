@@ -3060,7 +3060,7 @@ module.exports =
       return (0, _jsx3.default)('div', {
           className: _Home2.default.card
       }, void 0, (0, _jsx3.default)('a', {
-          href: '/detail?id=' + id
+          href: '/detail/' + id
       }, void 0, (0, _jsx3.default)('div', {
           style: { flex: 1, display: 'flex', padding: 11 }
       }, void 0, (0, _jsx3.default)('div', {
@@ -4232,7 +4232,7 @@ module.exports =
                       'Content-Type': 'application/json'
                   },
                   body: (0, _stringify2.default)({
-                      query: 'mutation{article(title: "' + title + '", content: ' + requestText + ', imageUrl:"' + imageUrl + '") {id}}'
+                      query: 'mutation{article(title: "' + title + '", content: ' + requestText + ', imageUrl:"' + (imageUrl ? imageUrl : "") + '") {id,imageUrl}}'
                   }),
                   credentials: 'include'
               }).then(function (resp) {
@@ -4446,13 +4446,16 @@ module.exports =
   
   exports.default = {
   
-      path: '/detail',
+      path: '/detail/:id',
   
-      action: function action() {
+      action: function action(_ref) {
           var _this = this;
   
+          var render = _ref.render;
+          var context = _ref.context;
+          var params = _ref.params;
           return (0, _asyncToGenerator3.default)(_regenerator2.default.mark(function _callee() {
-              var resp, _ref, data;
+              var resp, _ref2, data;
   
               return _regenerator2.default.wrap(function _callee$(_context) {
                   while (1) {
@@ -4466,7 +4469,7 @@ module.exports =
                                       'Content-Type': 'application/json'
                                   },
                                   body: (0, _stringify2.default)({
-                                      query: 'query { books { id,title,content,createTime,imageUrl} }'
+                                      query: 'query { books(id:"' + params.id + '") { id,title,content,createTime,imageUrl} }'
                                   }),
                                   credentials: 'include'
                               });
@@ -4477,10 +4480,10 @@ module.exports =
                               return resp.json();
   
                           case 5:
-                              _ref = _context.sent;
-                              data = _ref.data;
+                              _ref2 = _context.sent;
+                              data = _ref2.data;
   
-                              if (data) {
+                              if (!(!data || !data.books)) {
                                   _context.next = 9;
                                   break;
                               }
@@ -4488,9 +4491,10 @@ module.exports =
                               throw new Error('Failed to load the news feed.');
   
                           case 9:
-                              return _context.abrupt('return', (0, _jsx3.default)(_Detail2.default, {
-                                  data: data
-                              }));
+                              return _context.abrupt('return', render((0, _jsx3.default)(_Detail2.default, {
+                                  data: data.books[0],
+                                  context: context
+                              })));
   
                           case 10:
                           case 'end':
@@ -4548,6 +4552,10 @@ module.exports =
   
   var _Header2 = _interopRequireDefault(_Header);
   
+  var _marked = __webpack_require__(35);
+  
+  var _marked2 = _interopRequireDefault(_marked);
+  
   function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
   
   var _ref = (0, _jsx3.default)(_Header2.default, {
@@ -4574,21 +4582,23 @@ module.exports =
               var date = new Date(createTime || 0);
   
               return (0, _jsx3.default)('div', {
-                  style: { flex: 1 }
+                  style: { flex: 1, display: 'flex', flexDirection: "column" }
               }, void 0, _ref, imageUrl ? (0, _jsx3.default)('img', {
-                  style: { flex: 1, height: 180 },
+                  style: { flex: 1, height: 180, display: 'flex' },
                   src: imageUrl
               }) : null, (0, _jsx3.default)('div', {
-                  style: { fontSize: 21, padding: 11 }
+                  style: { fontSize: 21, padding: 11, display: 'flex' }
               }, void 0, title), (0, _jsx3.default)('div', {
-                  style: { flexDirection: 'row', flex: 1, padding: 11 }
+                  style: { flexDirection: 'row', flex: 1, padding: 11, display: 'flex' }
               }, void 0, (0, _jsx3.default)('div', {
-                  style: { fontSize: 12, color: '#989898' }
+                  style: { fontSize: 12, color: '#989898', display: 'flex' }
               }, void 0, '作者:大光'), (0, _jsx3.default)('div', {
-                  style: { marginLeft: 20, fontSize: 12, color: '#989898' }
+                  style: { marginLeft: 20, fontSize: 12, color: '#989898', display: 'flex' }
               }, void 0, date.getFullYear(), '-', date.getMonth() + 1, '-', date.getDate()), (0, _jsx3.default)('div', {
-                  style: { marginLeft: 20, fontSize: 12, color: '#989898' }
-              }, void 0, '阅读133万+')), (0, _jsx3.default)('div', {}, void 0, content));
+                  style: { marginLeft: 20, fontSize: 12, color: '#989898', display: 'flex' }
+              }, void 0, '阅读133万+')), (0, _jsx3.default)('span', {
+                  dangerouslySetInnerHTML: { __html: (0, _marked2.default)(content) }
+              }));
           }
       }]);
       return Detail;
