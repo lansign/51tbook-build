@@ -108,7 +108,7 @@ module.exports =
   
   var _routes2 = _interopRequireDefault(_routes);
   
-  var _assets = __webpack_require__(118);
+  var _assets = __webpack_require__(120);
   
   var _assets2 = _interopRequireDefault(_assets);
   
@@ -205,7 +205,7 @@ module.exports =
                       case 0:
                         css = [];
                         statusCode = 200;
-                        template = __webpack_require__(119); // eslint-disable-line global-require
+                        template = __webpack_require__(121); // eslint-disable-line global-require
   
                         data = { title: '', description: '', css: '', body: '', entry: _assets2.default.main.js };
   
@@ -296,7 +296,7 @@ module.exports =
   app.use(function (err, req, res, next) {
     // eslint-disable-line no-unused-vars
     console.log(pe.render(err)); // eslint-disable-line no-console
-    var template = __webpack_require__(121); // eslint-disable-line global-require
+    var template = __webpack_require__(123); // eslint-disable-line global-require
     var statusCode = err.status || 500;
     res.status(statusCode);
     res.send(template({
@@ -1349,9 +1349,9 @@ module.exports =
                   if (err) reject(err);else resolve(books);
               };
               if (args.id) {
-                  _BookModel2.default.find({ _id: args.id }, callback);
+                  _BookModel2.default.find({ _id: args.id }).populate('author').exec(callback);
               } else {
-                  _BookModel2.default.find(args.author ? { author: args.author } : {}).where('createTime').lte(args.createTime ? args.createTime : new Date().getTime()).sort({ createTime: -1 }).limit(args.size && args.size > 0 && args.size < 500 ? args.size : 500).exec(callback);
+                  _BookModel2.default.find(args.author ? { author: args.author } : {}).where('createTime').lte(args.createTime ? args.createTime : new Date().getTime()).sort({ createTime: -1 }).limit(args.size && args.size > 0 && args.size < 500 ? args.size : 500).populate('author').exec(callback);
               }
           });
       }
@@ -1396,7 +1396,19 @@ module.exports =
               content: { type: _graphql.GraphQLString },
               createTime: { type: _graphql.GraphQLFloat },
               editTime: { type: _graphql.GraphQLFloat },
-              author: { type: _graphql.GraphQLString }
+              author: { type: new _graphql.GraphQLObjectType({
+                      name: 'author',
+                      fields: function fields() {
+                          return {
+                              source: { type: _graphql.GraphQLString },
+                              sourceId: { type: _graphql.GraphQLString },
+                              displayName: { type: _graphql.GraphQLString },
+                              picture: { type: _graphql.GraphQLString },
+                              website: { type: _graphql.GraphQLString },
+                              location: { type: _graphql.GraphQLString }
+                          };
+                      }
+                  }) }
           };
       }
   }); /**
@@ -1432,7 +1444,7 @@ module.exports =
       content: String,
       createTime: { type: Number, index: true, default: new Date().getTime() },
       editTime: { type: Number, default: new Date().getTime() },
-      author: String
+      author: { type: String, ref: 'UserModel' }
   });
   
   exports.default = Book;
@@ -1619,39 +1631,39 @@ module.exports =
   
   var _home2 = _interopRequireDefault(_home);
   
-  var _contact = __webpack_require__(90);
+  var _contact = __webpack_require__(92);
   
   var _contact2 = _interopRequireDefault(_contact);
   
-  var _login = __webpack_require__(94);
+  var _login = __webpack_require__(96);
   
   var _login2 = _interopRequireDefault(_login);
   
-  var _content = __webpack_require__(98);
+  var _content = __webpack_require__(100);
   
   var _content2 = _interopRequireDefault(_content);
   
-  var _error = __webpack_require__(102);
+  var _error = __webpack_require__(104);
   
   var _error2 = _interopRequireDefault(_error);
   
-  var _article = __webpack_require__(106);
+  var _article = __webpack_require__(108);
   
   var _article2 = _interopRequireDefault(_article);
   
-  var _Edit = __webpack_require__(107);
+  var _Edit = __webpack_require__(109);
   
   var _Edit2 = _interopRequireDefault(_Edit);
   
-  var _detail = __webpack_require__(108);
+  var _detail = __webpack_require__(110);
   
   var _detail2 = _interopRequireDefault(_detail);
   
-  var _index = __webpack_require__(109);
+  var _index = __webpack_require__(111);
   
   var _index2 = _interopRequireDefault(_index);
   
-  var _detail3 = __webpack_require__(116);
+  var _detail3 = __webpack_require__(118);
   
   var _detail4 = _interopRequireDefault(_detail3);
   
@@ -2823,7 +2835,7 @@ module.exports =
                     'Content-Type': 'application/json'
                   },
                   body: (0, _stringify2.default)({
-                    query: 'query { books { id,title,content,createTime,imageUrl} }'
+                    query: 'query { books { id,title,content,createTime,imageUrl,author {source,sourceId,displayName}} }'
                   }),
                   credentials: 'include'
                 });
@@ -2896,7 +2908,7 @@ module.exports =
   
   var _Header2 = _interopRequireDefault(_Header);
   
-  var _Home3 = __webpack_require__(89);
+  var _Home3 = __webpack_require__(90);
   
   var _Home4 = _interopRequireDefault(_Home3);
   
@@ -2931,7 +2943,12 @@ module.exports =
       }, index, (0, _jsx3.default)(_Home4.default, {
         book: item
       }));
-    }))));
+    }))), (0, _jsx3.default)('a', {
+      href: '/article/add'
+    }, void 0, (0, _jsx3.default)('img', {
+      style: { position: 'fixed', bottom: 30, right: 40 },
+      src: __webpack_require__(91)
+    })));
   }
   
   Home.contextTypes = { setTitle: _react.PropTypes.func.isRequired };
@@ -3001,6 +3018,7 @@ module.exports =
   
   function Header(_ref) {
       var title = _ref.title;
+      var backUrl = _ref.backUrl;
   
   
       return (0, _jsx3.default)('div', {
@@ -3008,17 +3026,31 @@ module.exports =
               flex: 1,
               height: 50,
               backgroundColor: '#d94b40',
-              justifyContent: 'center',
               alignItems: 'center',
+              flexDirection: 'row' }
+      }, void 0, backUrl ? (0, _jsx3.default)('a', {
+          href: backUrl,
+          style: { height: 50, width: 50, position: 'absolute', textAlign: 'center' }
+      }, void 0, (0, _jsx3.default)('img', {
+          src: __webpack_require__(89),
+          style: { marginTop: 13 }
+      })) : null, title ? (0, _jsx3.default)('div', {
+          style: { flex: 1, textAlign: 'center',
               fontSize: 20,
               color: 'white' }
-      }, void 0, title);
+      }, void 0, title) : null);
   } /**
      * Created by Guang on 16/6/14.
      */
 
 /***/ },
 /* 89 */
+/***/ function(module, exports) {
+
+  module.exports = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABgAAAAYCAYAAADgdz34AAAABGdBTUEAALGPC/xhBQAAAG1JREFUSA1jYBgFQyoE/v//3wDCNHE01HAg9f8XEGtQ1RI0wwNHDQeHwLAIFqAnSAfoCYAJXYAufKC7QRkKBEBpnrrJEuYDoMGjlsACgzA9EMFFdGHHQtj9EBWMjIygSAdzgOwbxOobVTfwIQAA3ln7M5b8oYgAAAAASUVORK5CYII="
+
+/***/ },
+/* 90 */
 /***/ function(module, exports, __webpack_require__) {
 
   'use strict';
@@ -3045,22 +3077,23 @@ module.exports =
   
   function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
   
-  var _ref2 = (0, _jsx3.default)('div', {}, void 0, '作者:大光'); /**
-                                                               * Created by Guang on 16/6/14.
-                                                               */
-  
   function CardWrapper(_ref) {
       var book = _ref.book;
       var title = book.title;
       var createTime = book.createTime;
       var imageUrl = book.imageUrl;
       var id = book.id;
+      var author = book.author;
   
       var date = new Date(createTime || 0);
+  
+      console.log(author);
+  
       return (0, _jsx3.default)('div', {
           className: _Home2.default.card
       }, void 0, (0, _jsx3.default)('a', {
-          href: '/detail/' + id
+          href: '/detail/' + id,
+          style: { textDecoration: 'none' }
       }, void 0, (0, _jsx3.default)('div', {
           style: { flex: 1, display: 'flex', padding: 11 }
       }, void 0, (0, _jsx3.default)('div', {
@@ -3071,19 +3104,27 @@ module.exports =
               color: '#131313',
               fontWeight: 'bold' }
       }, void 0, title), (0, _jsx3.default)('div', {
-          style: { justifyContent: 'space-between', flexDirection: 'row', display: 'flex', marginTop: 8 }
-      }, void 0, (0, _jsx3.default)('div', {}, void 0, date.getFullYear(), '-', date.getMonth() + 1, '-', date.getDate()), _ref2)), imageUrl ? (0, _jsx3.default)('img', {
+          style: { justifyContent: 'space-between', flexDirection: 'row', display: 'flex', marginTop: 8, color: '#131313' }
+      }, void 0, (0, _jsx3.default)('div', {}, void 0, date.getFullYear(), '-', date.getMonth() + 1, '-', date.getDate()), (0, _jsx3.default)('div', {}, void 0, '作者:', author ? author.displayName : "null"))), imageUrl ? (0, _jsx3.default)('img', {
           style: { width: 84, height: 70 },
           src: imageUrl
       }) : null)), (0, _jsx3.default)('div', {
           style: { flex: 1, height: 7, backgroundColor: '#ebebeb', display: 'flex' }
       }));
-  }
+  } /**
+     * Created by Guang on 16/6/14.
+     */
   
   exports.default = (0, _withStyles2.default)(_Home2.default)(CardWrapper);
 
 /***/ },
-/* 90 */
+/* 91 */
+/***/ function(module, exports, __webpack_require__) {
+
+  module.exports = __webpack_require__.p + "4277dee55aed09c07208444ab1f05070.png";
+
+/***/ },
+/* 92 */
 /***/ function(module, exports, __webpack_require__) {
 
   'use strict';
@@ -3100,7 +3141,7 @@ module.exports =
   
   var _react2 = _interopRequireDefault(_react);
   
-  var _Contact = __webpack_require__(91);
+  var _Contact = __webpack_require__(93);
   
   var _Contact2 = _interopRequireDefault(_Contact);
   
@@ -3127,7 +3168,7 @@ module.exports =
   };
 
 /***/ },
-/* 91 */
+/* 93 */
 /***/ function(module, exports, __webpack_require__) {
 
   'use strict';
@@ -3148,7 +3189,7 @@ module.exports =
   
   var _withStyles2 = _interopRequireDefault(_withStyles);
   
-  var _Contact = __webpack_require__(92);
+  var _Contact = __webpack_require__(94);
   
   var _Contact2 = _interopRequireDefault(_Contact);
   
@@ -3181,11 +3222,11 @@ module.exports =
   exports.default = (0, _withStyles2.default)(_Contact2.default)(Contact);
 
 /***/ },
-/* 92 */
+/* 94 */
 /***/ function(module, exports, __webpack_require__) {
 
   
-      var content = __webpack_require__(93);
+      var content = __webpack_require__(95);
       var insertCss = __webpack_require__(59);
   
       if (typeof content === 'string') {
@@ -3198,7 +3239,7 @@ module.exports =
     
 
 /***/ },
-/* 93 */
+/* 95 */
 /***/ function(module, exports, __webpack_require__) {
 
   exports = module.exports = __webpack_require__(58)();
@@ -3215,7 +3256,7 @@ module.exports =
   };
 
 /***/ },
-/* 94 */
+/* 96 */
 /***/ function(module, exports, __webpack_require__) {
 
   'use strict';
@@ -3232,7 +3273,7 @@ module.exports =
   
   var _react2 = _interopRequireDefault(_react);
   
-  var _Login = __webpack_require__(95);
+  var _Login = __webpack_require__(97);
   
   var _Login2 = _interopRequireDefault(_Login);
   
@@ -3261,7 +3302,7 @@ module.exports =
   };
 
 /***/ },
-/* 95 */
+/* 97 */
 /***/ function(module, exports, __webpack_require__) {
 
   'use strict';
@@ -3302,7 +3343,7 @@ module.exports =
   
   var _withStyles2 = _interopRequireDefault(_withStyles);
   
-  var _Login = __webpack_require__(96);
+  var _Login = __webpack_require__(98);
   
   var _Login2 = _interopRequireDefault(_Login);
   
@@ -3391,11 +3432,11 @@ module.exports =
   exports.default = (0, _withStyles2.default)(_Login2.default)(Login);
 
 /***/ },
-/* 96 */
+/* 98 */
 /***/ function(module, exports, __webpack_require__) {
 
   
-      var content = __webpack_require__(97);
+      var content = __webpack_require__(99);
       var insertCss = __webpack_require__(59);
   
       if (typeof content === 'string') {
@@ -3408,7 +3449,7 @@ module.exports =
     
 
 /***/ },
-/* 97 */
+/* 99 */
 /***/ function(module, exports, __webpack_require__) {
 
   exports = module.exports = __webpack_require__(58)();
@@ -3436,7 +3477,7 @@ module.exports =
   };
 
 /***/ },
-/* 98 */
+/* 100 */
 /***/ function(module, exports, __webpack_require__) {
 
   'use strict';
@@ -3461,7 +3502,7 @@ module.exports =
   
   var _react2 = _interopRequireDefault(_react);
   
-  var _Content = __webpack_require__(99);
+  var _Content = __webpack_require__(101);
   
   var _Content2 = _interopRequireDefault(_Content);
   
@@ -3545,7 +3586,7 @@ module.exports =
       */
 
 /***/ },
-/* 99 */
+/* 101 */
 /***/ function(module, exports, __webpack_require__) {
 
   'use strict';
@@ -3586,7 +3627,7 @@ module.exports =
   
   var _withStyles2 = _interopRequireDefault(_withStyles);
   
-  var _Content = __webpack_require__(100);
+  var _Content = __webpack_require__(102);
   
   var _Content2 = _interopRequireDefault(_Content);
   
@@ -3633,11 +3674,11 @@ module.exports =
   exports.default = (0, _withStyles2.default)(_Content2.default)(Content);
 
 /***/ },
-/* 100 */
+/* 102 */
 /***/ function(module, exports, __webpack_require__) {
 
   
-      var content = __webpack_require__(101);
+      var content = __webpack_require__(103);
       var insertCss = __webpack_require__(59);
   
       if (typeof content === 'string') {
@@ -3650,7 +3691,7 @@ module.exports =
     
 
 /***/ },
-/* 101 */
+/* 103 */
 /***/ function(module, exports, __webpack_require__) {
 
   exports = module.exports = __webpack_require__(58)();
@@ -3667,7 +3708,7 @@ module.exports =
   };
 
 /***/ },
-/* 102 */
+/* 104 */
 /***/ function(module, exports, __webpack_require__) {
 
   'use strict';
@@ -3688,7 +3729,7 @@ module.exports =
   
   var _App2 = _interopRequireDefault(_App);
   
-  var _ErrorPage = __webpack_require__(103);
+  var _ErrorPage = __webpack_require__(105);
   
   var _ErrorPage2 = _interopRequireDefault(_ErrorPage);
   
@@ -3720,7 +3761,7 @@ module.exports =
       */
 
 /***/ },
-/* 103 */
+/* 105 */
 /***/ function(module, exports, __webpack_require__) {
 
   'use strict';
@@ -3741,7 +3782,7 @@ module.exports =
   
   var _withStyles2 = _interopRequireDefault(_withStyles);
   
-  var _ErrorPage = __webpack_require__(104);
+  var _ErrorPage = __webpack_require__(106);
   
   var _ErrorPage2 = _interopRequireDefault(_ErrorPage);
   
@@ -3778,11 +3819,11 @@ module.exports =
   exports.default = (0, _withStyles2.default)(_ErrorPage2.default)(ErrorPage);
 
 /***/ },
-/* 104 */
+/* 106 */
 /***/ function(module, exports, __webpack_require__) {
 
   
-      var content = __webpack_require__(105);
+      var content = __webpack_require__(107);
       var insertCss = __webpack_require__(59);
   
       if (typeof content === 'string') {
@@ -3795,7 +3836,7 @@ module.exports =
     
 
 /***/ },
-/* 105 */
+/* 107 */
 /***/ function(module, exports, __webpack_require__) {
 
   exports = module.exports = __webpack_require__(58)();
@@ -3809,7 +3850,7 @@ module.exports =
 
 
 /***/ },
-/* 106 */
+/* 108 */
 /***/ function(module, exports, __webpack_require__) {
 
   'use strict';
@@ -3826,11 +3867,11 @@ module.exports =
   
   var _App2 = _interopRequireDefault(_App);
   
-  var _Edit = __webpack_require__(107);
+  var _Edit = __webpack_require__(109);
   
   var _Edit2 = _interopRequireDefault(_Edit);
   
-  var _detail = __webpack_require__(108);
+  var _detail = __webpack_require__(110);
   
   var _detail2 = _interopRequireDefault(_detail);
   
@@ -3871,7 +3912,7 @@ module.exports =
   };
 
 /***/ },
-/* 107 */
+/* 109 */
 /***/ function(module, exports, __webpack_require__) {
 
   'use strict';
@@ -3888,7 +3929,7 @@ module.exports =
   
   var _App2 = _interopRequireDefault(_App);
   
-  var _detail = __webpack_require__(108);
+  var _detail = __webpack_require__(110);
   
   var _detail2 = _interopRequireDefault(_detail);
   
@@ -3931,7 +3972,7 @@ module.exports =
   };
 
 /***/ },
-/* 108 */
+/* 110 */
 /***/ function(module, exports, __webpack_require__) {
 
   'use strict';
@@ -3987,7 +4028,7 @@ module.exports =
   };
 
 /***/ },
-/* 109 */
+/* 111 */
 /***/ function(module, exports, __webpack_require__) {
 
   'use strict';
@@ -4008,7 +4049,7 @@ module.exports =
   
   var _react2 = _interopRequireDefault(_react);
   
-  var _Add = __webpack_require__(110);
+  var _Add = __webpack_require__(112);
   
   var _Add2 = _interopRequireDefault(_Add);
   
@@ -4034,7 +4075,7 @@ module.exports =
       */
 
 /***/ },
-/* 110 */
+/* 112 */
 /***/ function(module, exports, __webpack_require__) {
 
   'use strict';
@@ -4079,7 +4120,7 @@ module.exports =
   
   var _withStyles2 = _interopRequireDefault(_withStyles);
   
-  var _Add = __webpack_require__(111);
+  var _Add = __webpack_require__(113);
   
   var _Add2 = _interopRequireDefault(_Add);
   
@@ -4087,7 +4128,7 @@ module.exports =
   
   var _fetch2 = _interopRequireDefault(_fetch);
   
-  var _Add3 = __webpack_require__(113);
+  var _Add3 = __webpack_require__(115);
   
   var _Add4 = _interopRequireDefault(_Add3);
   
@@ -4098,7 +4139,7 @@ module.exports =
                                */
   
   var img = {
-      edit: __webpack_require__(115)
+      edit: __webpack_require__(117)
   };
   
   var _ref = (0, _jsx3.default)(_Add4.default, {});
@@ -4255,11 +4296,11 @@ module.exports =
   exports.default = (0, _withStyles2.default)(_Add2.default)(Add);
 
 /***/ },
-/* 111 */
+/* 113 */
 /***/ function(module, exports, __webpack_require__) {
 
   
-      var content = __webpack_require__(112);
+      var content = __webpack_require__(114);
       var insertCss = __webpack_require__(59);
   
       if (typeof content === 'string') {
@@ -4272,7 +4313,7 @@ module.exports =
     
 
 /***/ },
-/* 112 */
+/* 114 */
 /***/ function(module, exports, __webpack_require__) {
 
   exports = module.exports = __webpack_require__(58)();
@@ -4299,7 +4340,7 @@ module.exports =
   };
 
 /***/ },
-/* 113 */
+/* 115 */
 /***/ function(module, exports, __webpack_require__) {
 
   'use strict';
@@ -4336,7 +4377,7 @@ module.exports =
   
   var _react2 = _interopRequireDefault(_react);
   
-  var _Add = __webpack_require__(111);
+  var _Add = __webpack_require__(113);
   
   var _Add2 = _interopRequireDefault(_Add);
   
@@ -4347,8 +4388,8 @@ module.exports =
   function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
   
   var img = {
-      login: __webpack_require__(114),
-      edit: __webpack_require__(115)
+      login: __webpack_require__(116),
+      edit: __webpack_require__(117)
   }; /**
       * Created by Guang on 16/6/13.
       */
@@ -4389,19 +4430,19 @@ module.exports =
   exports.default = (0, _withStyles2.default)(_Add2.default)(Header);
 
 /***/ },
-/* 114 */
+/* 116 */
 /***/ function(module, exports) {
 
   module.exports = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACgAAAAdCAYAAADYSS5zAAAAAXNSR0IArs4c6QAAAgNJREFUWAntl70vBEEYxq3vCCHxkVAJISGcKJBcQlQS4Vqd/0FJrVQoqDUUWrWIToFOQkKh0Akh0Z2P9Xs3O3drdu6yayayhTd57p33Y555bnZvd66mxqH5vt8ERh1SuqVC3BYQG3bFXOuKKOTp0bw1vWuBMUHsZl0smSJhJZDFx8E5mDStSf6Q/BXeM9WT5KwEssAcmALzwGQTJEdAg6mYJGcrUK3x6x1SBJV8faVCwvxz2PcUehUrf0u+CbyH9b913Ft1IA+CL4pvBdNKBWOpN6v43//vQJId4J6R92lLkl6XPazZJtA5Y48Hmq5pkmfXK7gLIbljcOl53hfeylgjB8EiED8UogP/BrpYo4iPGxMHQTV7pLgHjG+OOGM5w5x+sA0eQDVbKM/SRsxaqzZTq50Slx4pGlUppKcPHIAPkMR2SpP1AbNPkjBEej4Z7wLjs478KngBaexe1xXEMLSDYhqmSO8F494oMfFmpJ52OBblUgJX0rJo/TfEXUKGX9dqacMNk8D9tCyG/iNyOZD0fjNQBKkzJTA4zZCSQ6X87G1NLs0AsDqkMn8GTd0iRh238ow7JZERE11LokUJXM6IsKiMQJMSWIhWMjJe4DI31vIxiCB5tWXN5L08LzuYxd1Tm1XIusBlETir5DryviMeoen3uAdt/zj90MNR6eNHwjL4BvEIMzTzf0fiAAAAAElFTkSuQmCC"
 
 /***/ },
-/* 115 */
+/* 117 */
 /***/ function(module, exports) {
 
   module.exports = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABwAAAAhCAYAAADK6cvnAAAAAXNSR0IArs4c6QAAAlVJREFUSA21l71rFFEUxWeiQlIZMGAjhN1obIxgrIQQMR9YCIKF4D8gNqJNmmCTJqVdGrXVKp1gkVi4sZAUCyFVgqBCjJpOROIWKpvf3Z152Zm9d/bt7OyFs/PeufedM/ft28kkrNfrYRAEF8EQ6CUOwjD8oQngcQL+NngXMHkFiojVtBmiIbgPdsB1yQvxl+smeClED/GZDt/G69E9w3gDlMAtchWugXQo8awxKegDvTHwDRyCGwlZCInCDNE6D/bBHzCTMJMJpEQhhuhIZ1+BmM22meU1RKwMPgDXQcTtca2BOdWsB8MLiLrviHEJxGbzrWbwS2DKcUwkut5S1oyD70AOhnxn0tlNJxwN4CSc/kC6wHfOMf9IrZzAX2AE3IFb45oZJ7Usd/QQ/pyWa+H2MVihVkxHGa+35Oyh9Eu4lqWSebXBZn9UbdXjTCTh9NUOKZe7tnKx2r940M3VEp1EZNgQes/2/TRyHWnL8Ckrrxqrr8HLszdXWIaPUDttKO4avBdtGYroKUPhv8F70ZahHHFrS5+Te+ClrhRZhi+ofaPUC+X1czDW6kefU+h+N9bCvLzaIT/W1whOpER/cyOXU1zXU9UQlT0wmFI7TM1zTVVDOpFnaV9CNWRLl3Erd3CUl6YnHWra0qohVfIH80pbdZLYSk79Zqohd954h/ST6K5KNWRL7yFzNkOqwk1tZ+TNlGpI9QKwnjQi9hgUangXwaz/NQ7ENU+oHbJdX/KI+azJ/RLlI67VSIc1MM1B6dvzM/Jo+mO0COTVvF/xCeFLTbcgOAJ1IfFg9ELbRwAAAABJRU5ErkJggg=="
 
 /***/ },
-/* 116 */
+/* 118 */
 /***/ function(module, exports, __webpack_require__) {
 
   /**
@@ -4434,7 +4475,7 @@ module.exports =
   
   var _react2 = _interopRequireDefault(_react);
   
-  var _Detail = __webpack_require__(117);
+  var _Detail = __webpack_require__(119);
   
   var _Detail2 = _interopRequireDefault(_Detail);
   
@@ -4448,14 +4489,14 @@ module.exports =
   
       path: '/detail/:id',
   
-      action: function action(_ref) {
+      action: function action(_ref, _ref2) {
           var _this = this;
   
           var render = _ref.render;
           var context = _ref.context;
-          var params = _ref.params;
+          var id = _ref2.id;
           return (0, _asyncToGenerator3.default)(_regenerator2.default.mark(function _callee() {
-              var resp, _ref2, data;
+              var resp, _ref3, data;
   
               return _regenerator2.default.wrap(function _callee$(_context) {
                   while (1) {
@@ -4469,7 +4510,7 @@ module.exports =
                                       'Content-Type': 'application/json'
                                   },
                                   body: (0, _stringify2.default)({
-                                      query: 'query { books(id:"' + params.id + '") { id,title,content,createTime,imageUrl} }'
+                                      query: 'query { books(id:"' + id + '") { id,title,content,createTime,imageUrl,author {source,sourceId,displayName}} }'
                                   }),
                                   credentials: 'include'
                               });
@@ -4480,8 +4521,8 @@ module.exports =
                               return resp.json();
   
                           case 5:
-                              _ref2 = _context.sent;
-                              data = _ref2.data;
+                              _ref3 = _context.sent;
+                              data = _ref3.data;
   
                               if (!(!data || !data.books)) {
                                   _context.next = 9;
@@ -4507,7 +4548,7 @@ module.exports =
   };
 
 /***/ },
-/* 117 */
+/* 119 */
 /***/ function(module, exports, __webpack_require__) {
 
   /**
@@ -4559,7 +4600,7 @@ module.exports =
   function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
   
   var _ref = (0, _jsx3.default)(_Header2.default, {
-      title: '技术博客'
+      backUrl: '/'
   });
   
   var Detail = function (_React$Component) {
@@ -4578,13 +4619,14 @@ module.exports =
               var content = _props$data.content;
               var imageUrl = _props$data.imageUrl;
               var createTime = _props$data.createTime;
+              var author = _props$data.author;
   
               var date = new Date(createTime || 0);
   
-              return (0, _jsx3.default)('div', {
-                  style: { flex: 1, display: 'flex', flexDirection: "column" }
-              }, void 0, _ref, imageUrl ? (0, _jsx3.default)('img', {
-                  style: { flex: 1, height: 180, display: 'flex' },
+              return (0, _jsx3.default)('div', {}, void 0, _ref, (0, _jsx3.default)('div', {
+                  style: { maxWidth: 1000, margin: "0 auto" }
+              }, void 0, (0, _jsx3.default)('div', {}, void 0, imageUrl ? (0, _jsx3.default)('img', {
+                  style: { width: '100%', height: 'auto' },
                   src: imageUrl
               }) : null, (0, _jsx3.default)('div', {
                   style: { fontSize: 21, padding: 11, display: 'flex' }
@@ -4592,13 +4634,13 @@ module.exports =
                   style: { flexDirection: 'row', flex: 1, padding: 11, display: 'flex' }
               }, void 0, (0, _jsx3.default)('div', {
                   style: { fontSize: 12, color: '#989898', display: 'flex' }
-              }, void 0, '作者:大光'), (0, _jsx3.default)('div', {
+              }, void 0, '作者:', author ? author.displayName : "null"), (0, _jsx3.default)('div', {
                   style: { marginLeft: 20, fontSize: 12, color: '#989898', display: 'flex' }
               }, void 0, date.getFullYear(), '-', date.getMonth() + 1, '-', date.getDate()), (0, _jsx3.default)('div', {
                   style: { marginLeft: 20, fontSize: 12, color: '#989898', display: 'flex' }
-              }, void 0, '阅读133万+')), (0, _jsx3.default)('span', {
+              }, void 0, '阅读133万+'))), (0, _jsx3.default)('dev', {
                   dangerouslySetInnerHTML: { __html: (0, _marked2.default)(content) }
-              }));
+              })));
           }
       }]);
       return Detail;
@@ -4607,23 +4649,23 @@ module.exports =
   exports.default = Detail;
 
 /***/ },
-/* 118 */
+/* 120 */
 /***/ function(module, exports) {
 
   module.exports = require("./assets");
 
 /***/ },
-/* 119 */
+/* 121 */
 /***/ function(module, exports, __webpack_require__) {
 
-  var jade = __webpack_require__(120);
+  var jade = __webpack_require__(122);
   
   module.exports = function template(locals) {
   var buf = [];
   var jade_mixins = {};
   var jade_interp;
   ;var locals_for_with = (locals || {});(function (body, css, description, entry, title, trackingId) {
-  buf.push("<!DOCTYPE html><html lang=\"\" class=\"no-js\"><head><meta charset=\"utf-8\"><meta http-equiv=\"x-ua-compatible\" content=\"ie=edge\"><title>" + (jade.escape(null == (jade_interp = title) ? "" : jade_interp)) + "</title><meta name=\"description\"" + (jade.attr("description", description, true, true)) + "><meta name=\"viewport\" content=\"width=device-width, initial-scale=1\"><link rel=\"apple-touch-icon\" href=\"apple-touch-icon.png\"><style id=\"css\">" + (null == (jade_interp = css) ? "" : jade_interp) + "</style></head><body><div id=\"app\" style=\"height:100%\">" + (null == (jade_interp = body) ? "" : jade_interp) + "</div><script" + (jade.attr("src", entry, true, true)) + "></script><script>window.ga=function(){ga.q.push(arguments)};ga.q=[];ga.l=+new Date;\nga('create','" + (jade.escape((jade_interp = trackingId) == null ? '' : jade_interp)) + "','auto');ga('send','pageview')</script>");
+  buf.push("<!DOCTYPE html><html lang=\"\" class=\"no-js\"><head><meta charset=\"utf-8\"><meta http-equiv=\"x-ua-compatible\" content=\"ie=edge\"><title>" + (jade.escape(null == (jade_interp = title) ? "" : jade_interp)) + "</title><meta name=\"description\"" + (jade.attr("description", description, true, true)) + "><meta name=\"viewport\" content=\"width=device-width, initial-scale=1\"><link rel=\"apple-touch-icon\" href=\"apple-touch-icon.png\"><style id=\"css\">" + (null == (jade_interp = css) ? "" : jade_interp) + "</style></head><body style=\"margin:0\"><div id=\"app\" style=\"height:100%\">" + (null == (jade_interp = body) ? "" : jade_interp) + "</div><script" + (jade.attr("src", entry, true, true)) + "></script><script>window.ga=function(){ga.q.push(arguments)};ga.q=[];ga.l=+new Date;\nga('create','" + (jade.escape((jade_interp = trackingId) == null ? '' : jade_interp)) + "','auto');ga('send','pageview')</script>");
   if ( trackingId)
   {
   buf.push("<script src=\"https://www.google-analytics.com/analytics.js\" async defer></script>");
@@ -4632,7 +4674,7 @@ module.exports =
   }
 
 /***/ },
-/* 120 */
+/* 122 */
 /***/ function(module, exports, __webpack_require__) {
 
   'use strict';
@@ -4884,10 +4926,10 @@ module.exports =
 
 
 /***/ },
-/* 121 */
+/* 123 */
 /***/ function(module, exports, __webpack_require__) {
 
-  var jade = __webpack_require__(120);
+  var jade = __webpack_require__(122);
   
   module.exports = function template(locals) {
   var buf = [];
