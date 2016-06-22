@@ -464,7 +464,6 @@ module.exports =
   }));
   
   function callback(source, accessToken, refreshToken, profile, done) {
-    console.log("profile", profile);
     _UserModel2.default.findOne({ source: source, sourceId: profile.id }, function (err, user) {
       if (err) {
         done(err, null);
@@ -1910,7 +1909,7 @@ module.exports =
   
   
   // module
-  exports.push([module.id, "/*! normalize.css v4.1.1 | MIT License | github.com/necolas/normalize.css */html{font-family:sans-serif;-ms-text-size-adjust:100%;-webkit-text-size-adjust:100%}body{margin:0}article,aside,details,figcaption,figure,footer,header,main,menu,nav,section,summary{display:block}audio,canvas,progress,video{display:inline-block}audio:not([controls]){display:none;height:0}progress{vertical-align:baseline}[hidden],template{display:none}a{background-color:transparent;-webkit-text-decoration-skip:objects}a:active,a:hover{outline-width:0}abbr[title]{border-bottom:none;text-decoration:underline;text-decoration:underline dotted}b,strong{font-weight:inherit;font-weight:bolder}dfn{font-style:italic}h1{font-size:2em;margin:.67em 0}mark{background-color:#ff0;color:#000}small{font-size:80%}sub,sup{font-size:75%;line-height:0;position:relative;vertical-align:baseline}sub{bottom:-.25em}sup{top:-.5em}img{border-style:none}svg:not(:root){overflow:hidden}code,kbd,pre,samp{font-family:monospace,monospace;font-size:1em}figure{margin:1em 40px}hr{box-sizing:content-box;height:0;overflow:visible}button,input,select,textarea{font:inherit;margin:0}optgroup{font-weight:700}button,input{overflow:visible}button,select{text-transform:none}[type=reset],[type=submit],button,html [type=button]{-webkit-appearance:button}[type=button]::-moz-focus-inner,[type=reset]::-moz-focus-inner,[type=submit]::-moz-focus-inner,button::-moz-focus-inner{border-style:none;padding:0}[type=button]:-moz-focusring,[type=reset]:-moz-focusring,[type=submit]:-moz-focusring,button:-moz-focusring{outline:1px dotted ButtonText}fieldset{border:1px solid silver;margin:0 2px;padding:.35em .625em .75em}legend{box-sizing:border-box;color:inherit;display:table;max-width:100%;padding:0;white-space:normal}textarea{overflow:auto}[type=checkbox],[type=radio]{box-sizing:border-box;padding:0}[type=number]::-webkit-inner-spin-button,[type=number]::-webkit-outer-spin-button{height:auto}[type=search]{-webkit-appearance:textfield;outline-offset:-2px}[type=search]::-webkit-search-cancel-button,[type=search]::-webkit-search-decoration{-webkit-appearance:none}::-webkit-input-placeholder{color:inherit;opacity:.54}::-webkit-file-upload-button{-webkit-appearance:button;font:inherit}\n\n/*! React Starter Kit | MIT License | https://www.reactstarterkit.com/ */html{color:#222;font-weight:100;font-size:1em;font-family:Segoe UI,HelveticaNeue-Light,sans-serif;line-height:1.375}a{color:#0074c2}::-moz-selection{background:#b3d4fc;text-shadow:none}::selection{background:#b3d4fc;text-shadow:none}hr{display:block;height:1px;border:0;border-top:1px solid #ccc;margin:1em 0;padding:0}audio,canvas,iframe,img,svg,video{vertical-align:middle}fieldset{border:0;margin:0;padding:0}textarea{resize:vertical}.browserupgrade{margin:.2em 0;background:#ccc;color:#000;padding:.2em 0}@media print{*,:after,:before{background:transparent!important;color:#000!important;box-shadow:none!important;text-shadow:none!important}a,a:visited{text-decoration:underline}a[href]:after{content:' (' attr(href) ')'}abbr[title]:after{content:' (' attr(title) ')'}a[href^='#']:after,a[href^='javascript:']:after{content:''}blockquote,pre{border:1px solid #999;page-break-inside:avoid}thead{display:table-header-group}img,tr{page-break-inside:avoid}img{max-width:100%!important}h2,h3,p{orphans:3;widows:3}h2,h3{page-break-after:avoid}}", ""]);
+  exports.push([module.id, "/*! normalize.css v4.1.1 | MIT License | github.com/necolas/normalize.css */html{font-family:sans-serif;-ms-text-size-adjust:100%;-webkit-text-size-adjust:100%}body{margin:0}article,aside,details,figcaption,figure,footer,header,main,menu,nav,section,summary{display:block}audio,canvas,progress,video{display:inline-block}audio:not([controls]){display:none;height:0}progress{vertical-align:baseline}[hidden],template{display:none}a{background-color:transparent;-webkit-text-decoration-skip:objects}a:active,a:hover{outline-width:0}abbr[title]{border-bottom:none;text-decoration:underline;text-decoration:underline dotted}b,strong{font-weight:inherit;font-weight:bolder}dfn{font-style:italic}h1{font-size:2em;margin:.67em 0}mark{background-color:#ff0;color:#000}small{font-size:80%}sub,sup{font-size:75%;line-height:0;position:relative;vertical-align:baseline}sub{bottom:-.25em}sup{top:-.5em}img{border-style:none}svg:not(:root){overflow:hidden}code,kbd,pre,samp{font-family:monospace,monospace;font-size:1em}figure{margin:1em 40px}hr{box-sizing:content-box;height:0;overflow:visible}button,input,select,textarea{font:inherit;margin:0}optgroup{font-weight:700}button,input{overflow:visible}button,select{text-transform:none}[type=reset],[type=submit],button,html [type=button]{-webkit-appearance:button}[type=button]::-moz-focus-inner,[type=reset]::-moz-focus-inner,[type=submit]::-moz-focus-inner,button::-moz-focus-inner{border-style:none;padding:0}[type=button]:-moz-focusring,[type=reset]:-moz-focusring,[type=submit]:-moz-focusring,button:-moz-focusring{outline:1px dotted ButtonText}fieldset{border:1px solid silver;margin:0 2px;padding:.35em .625em .75em}legend{box-sizing:border-box;color:inherit;display:table;max-width:100%;padding:0;white-space:normal}textarea{overflow:auto}[type=checkbox],[type=radio]{box-sizing:border-box;padding:0}[type=number]::-webkit-inner-spin-button,[type=number]::-webkit-outer-spin-button{height:auto}[type=search]{-webkit-appearance:textfield;outline-offset:-2px}[type=search]::-webkit-search-cancel-button,[type=search]::-webkit-search-decoration{-webkit-appearance:none}::-webkit-input-placeholder{color:inherit;opacity:.54}::-webkit-file-upload-button{-webkit-appearance:button;font:inherit}\n\n/*! React Starter Kit | MIT License | https://www.reactstarterkit.com/ */html{color:#222;font-weight:100;font-size:1em;font-family:Arial,Segoe UI,HelveticaNeue-Light,sans-serif;line-height:1.375}a{color:#0074c2}::-moz-selection{background:#b3d4fc;text-shadow:none}::selection{background:#b3d4fc;text-shadow:none}hr{display:block;height:1px;border:0;border-top:1px solid #ccc;margin:1em 0;padding:0}audio,canvas,iframe,img,svg,video{vertical-align:middle}fieldset{border:0;margin:0;padding:0}textarea{resize:vertical}.browserupgrade{margin:.2em 0;background:#ccc;color:#000;padding:.2em 0}@media print{*,:after,:before{background:transparent!important;color:#000!important;box-shadow:none!important;text-shadow:none!important}a,a:visited{text-decoration:underline}a[href]:after{content:' (' attr(href) ')'}abbr[title]:after{content:' (' attr(title) ')'}a[href^='#']:after,a[href^='javascript:']:after{content:''}blockquote,pre{border:1px solid #999;page-break-inside:avoid}thead{display:table-header-group}img,tr{page-break-inside:avoid}img{max-width:100%!important}h2,h3,p{orphans:3;widows:3}h2,h3{page-break-after:avoid}}", ""]);
   
   // exports
 
@@ -3087,8 +3086,6 @@ module.exports =
   
       var date = new Date(createTime || 0);
   
-      console.log(author);
-  
       return (0, _jsx3.default)('div', {
           className: _Home2.default.card
       }, void 0, (0, _jsx3.default)('a', {
@@ -4019,8 +4016,6 @@ module.exports =
           var render = _ref3.render;
           var context = _ref3.context;
   
-          console.log(context);
-  
           return render((0, _jsx3.default)(_App2.default, {
               context: context
           }, void 0, _ref4));
@@ -4084,10 +4079,6 @@ module.exports =
       value: true
   });
   
-  var _stringify = __webpack_require__(60);
-  
-  var _stringify2 = _interopRequireDefault(_stringify);
-  
   var _jsx2 = __webpack_require__(47);
   
   var _jsx3 = _interopRequireDefault(_jsx2);
@@ -4142,10 +4133,6 @@ module.exports =
       edit: __webpack_require__(117)
   };
   
-  var _ref = (0, _jsx3.default)(_Add4.default, {});
-  
-  var _ref2 = (0, _jsx3.default)('hr', {});
-  
   var Add = function (_Component) {
       (0, _inherits3.default)(Add, _Component);
   
@@ -4178,44 +4165,27 @@ module.exports =
               return (0, _jsx3.default)('div', {
                   id: 'add',
                   className: _Add2.default.root
-              }, void 0, _ref, (0, _jsx3.default)('div', {
+              }, void 0, (0, _jsx3.default)(_Add4.default, {
+                  text: this.state.text
+              }), (0, _jsx3.default)('div', {
                   className: _Add2.default.center
               }, void 0, (0, _jsx3.default)('textarea', {
                   className: _Add2.default.inputFrame,
                   type: 'text',
-                  placeholder: 'Say something...',
                   onChange: function onChange(e) {
                       _this2.setState({ text: e.target.value });
                   }
               }), (0, _jsx3.default)('div', {
                   className: _Add2.default.showFrame
-              }, void 0, (0, _jsx3.default)('div', {
-                  style: { display: 'flex', flex: 1, paddingTop: 10 }
-              }, void 0, (0, _jsx3.default)('input', {
-                  type: 'text',
-                  placeholder: '无标题文章',
-                  className: _Add2.default.inputTitle,
-                  style: { display: 'flex', flex: 1, height: 40, fontSize: 30, paddingLeft: 20, color: '#555555' },
-                  onChange: function onChange(e) {
-                      _this2.state.title = e.target.value;
-                  }
-              })), _ref2, (0, _jsx3.default)('span', {
+              }, void 0, (0, _jsx3.default)('span', {
                   className: _Add2.default.showFrame_span,
                   dangerouslySetInnerHTML: this.rawMarkup()
-              }), (0, _jsx3.default)('button', {
-                  className: _Add2.default.button,
-                  type: 'submit',
-                  onClick: function onClick() {
-                      _this2.send(_this2.state.text, _this2.state.title);
-                  }
-              }, void 0, (0, _jsx3.default)('img', {
-                  style: { marginRight: '10px' },
-                  src: img.edit
-              }), '发布'))));
+              }))));
           }
       }, {
           key: 'rawMarkup',
           value: function rawMarkup() {
+              //Custom highlight options
               //md.setOptions({
               //    highlight: function (code, lang, callback) {
               //        require('pygmentize-bundled')({ lang: lang, format: 'html' }, code, function (err, result) {
@@ -4224,70 +4194,6 @@ module.exports =
               //    }
               //});
               return { __html: md(this.state.text) };
-          }
-      }, {
-          key: 'send',
-          value: function send(text, title) {
-              if (!title) {
-                  alert("标题不可为空");
-                  return;
-              }
-              //获取image标签
-              //
-              var imageUrl = void 0;
-              var imgRegex = text.match(/!\[.*?\]\((.*?)\)/);
-              if (imgRegex) imageUrl = imgRegex[1];
-  
-              var rx_escapable = /[\\\"\u0000-\u001f\u007f-\u009f\u00ad\u0600-\u0604\u070f\u17b4\u17b5\u200c-\u200f\u2028-\u202f\u2060-\u206f\ufeff\ufff0-\uffff]/g;
-              var meta = { // table of character substitutions
-                  "\b": "\\b",
-                  "\t": "\\t",
-                  "\n": "\\n",
-                  "\f": "\\f",
-                  "\r": "\\r",
-                  "\"": "\\\"",
-                  "\\": "\\\\"
-              };
-  
-              var quote = function quote(string) {
-  
-                  // If the string contains no control characters, no quote characters, and no
-                  // backslash characters, then we can safely slap some quotes around it.
-                  // Otherwise we must also replace the offending characters with safe escape
-                  // sequences.
-  
-                  rx_escapable.lastIndex = 0;
-                  return rx_escapable.test(string) ? "\"" + string.replace(rx_escapable, function (a) {
-                      var c = meta[a];
-                      return typeof c === "string" ? c : '\\u' + ("0000" + a.charCodeAt(0).toString(16)).slice(-4);
-                  }) + "\"" : "\"" + string + "\"";
-              };
-  
-              var requestText = quote('' + text);
-  
-              console.log("requestText", requestText);
-              (0, _fetch2.default)('/graphql', {
-                  method: 'post',
-                  headers: {
-                      Accept: 'application/json',
-                      'Content-Type': 'application/json'
-                  },
-                  body: (0, _stringify2.default)({
-                      query: 'mutation{article(title: "' + title + '", content: ' + requestText + ', imageUrl:"' + (imageUrl ? imageUrl : "") + '") {id,imageUrl}}'
-                  }),
-                  credentials: 'include'
-              }).then(function (resp) {
-                  return resp.json();
-              }).then(function (data) {
-                  console.log(data);
-                  if (data.data.article.id) {
-                      alert("发布成功!");
-                  } else {
-                      alert("发布失败!");
-                  }
-              }).catch(function (err) {
-                  alert(err);
-              });
           }
       }]);
       return Add;
@@ -4321,7 +4227,7 @@ module.exports =
   
   
   // module
-  exports.push([module.id, "body,html{height:100%;background:#e9e9e9}._1r8b{-webkit-box-orient:vertical;-ms-flex-direction:column;flex-direction:column}._1r8b,.BliM{display:-webkit-box;display:-ms-flexbox;display:flex;height:100%;-webkit-box-direction:normal}.BliM{-webkit-box-orient:horizontal;-ms-flex-direction:row;flex-direction:row}._28J4{background-image:-webkit-gradient(linear,left top,left bottom,from(#ef6f5e),to(#da3c30));background-image:-webkit-linear-gradient(top,#ef6f5e,#da3c30);background-image:linear-gradient(-180deg,#ef6f5e,#da3c30);width:100%;height:60px;-webkit-box-pack:justify;-ms-flex-pack:justify;justify-content:space-between}._28J4,.uD_P{display:-webkit-box;display:-ms-flexbox;display:flex;-webkit-box-align:center;-ms-flex-align:center;align-items:center}.uD_P{-webkit-box-orient:horizontal;-webkit-box-direction:normal;-ms-flex-direction:row;flex-direction:row;margin-left:26px;margin-right:26px}.vvC1{margin-left:20px}._17KC,.vvC1{font-family:Roboto-Medium;font-size:20px;color:#fff;letter-spacing:0;text-align:left}._17KC{margin-left:10px}._14cB{border:1px solid #fff;width:0;height:34px;margin-right:38px}.LP3A{width:50%;background-color:transparent;resize:none;font-size:13px;outline:none;border-style:none;padding-left:50px;padding-top:20px}.bVxo{float:right;width:50%;height:100%;background-color:#fff;box-sizing:border-box;padding-bottom:146px}._2i1O{float:left;height:100%;width:100%;overflow-y:auto}.mORg{background-image:-webkit-gradient(linear,left top,left bottom,from(#ef6f5e),to(#da3c30));background-image:-webkit-linear-gradient(top,#ef6f5e,#da3c30);background-image:linear-gradient(-180deg,#ef6f5e,#da3c30);width:100%;height:60px;font-size:20px;color:#fff}.mORg,.yjnR{border:none;outline:none}", ""]);
+  exports.push([module.id, "body,html{font-family:Arial,Segoe UI,HelveticaNeue-Light,sans-serif;height:100%;background:#e9e9e9}._1r8b{-webkit-box-orient:vertical;-ms-flex-direction:column;flex-direction:column}._1r8b,.BliM{display:-webkit-box;display:-ms-flexbox;display:flex;height:100%;-webkit-box-direction:normal}.BliM{-webkit-box-orient:horizontal;-ms-flex-direction:row;flex-direction:row}._28J4{background-image:-webkit-gradient(linear,left top,left bottom,from(#ef6f5e),to(#da3c30));background-image:-webkit-linear-gradient(top,#ef6f5e,#da3c30);background-image:linear-gradient(-180deg,#ef6f5e,#da3c30);width:100%;height:50px;-webkit-box-pack:justify;-ms-flex-pack:justify;justify-content:space-between}._28J4,.uD_P{display:-webkit-box;display:-ms-flexbox;display:flex;-webkit-box-align:center;-ms-flex-align:center;align-items:center}.uD_P{-webkit-box-orient:horizontal;-webkit-box-direction:normal;-ms-flex-direction:row;flex-direction:row;margin-left:26px;margin-right:26px;background-color:transparent;border:1px solid transparent}.vvC1{margin-left:20px}._17KC,.vvC1{font-family:Roboto-Medium;font-size:20px;color:#fff;letter-spacing:0;text-align:left}._17KC{margin-left:10px}._14cB{border:1px solid #fff;width:0;height:34px;margin-right:38px}.LP3A{width:50%;background-color:transparent;resize:none;font-size:15px;outline:none;border-style:none;padding-left:25px;padding-top:25px;padding-right:25px}.bVxo{float:right;width:50%;height:100%;background-color:#fff;box-sizing:border-box}._2i1O{float:left;height:100%;width:100%;overflow-y:auto;padding-left:25px;padding-top:25px;padding-right:25px}.mORg{background-image:-webkit-gradient(linear,left top,left bottom,from(#ef6f5e),to(#da3c30));background-image:-webkit-linear-gradient(top,#ef6f5e,#da3c30);background-image:linear-gradient(-180deg,#ef6f5e,#da3c30);width:100%;height:60px;font-size:20px;color:#fff}.mORg,.yjnR{border:none;outline:none}", ""]);
   
   // exports
   exports.locals = {
@@ -4348,6 +4254,10 @@ module.exports =
   Object.defineProperty(exports, "__esModule", {
       value: true
   });
+  
+  var _stringify = __webpack_require__(60);
+  
+  var _stringify2 = _interopRequireDefault(_stringify);
   
   var _jsx2 = __webpack_require__(47);
   
@@ -4388,7 +4298,7 @@ module.exports =
   function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
   
   var img = {
-      login: __webpack_require__(116),
+      logo: __webpack_require__(116),
       edit: __webpack_require__(117)
   }; /**
       * Created by Guang on 16/6/13.
@@ -4405,16 +4315,23 @@ module.exports =
       (0, _createClass3.default)(Header, [{
           key: 'render',
           value: function render() {
+              var _this2 = this;
+  
               return (0, _jsx3.default)('div', {
                   className: _Add2.default.header
               }, void 0, (0, _jsx3.default)('div', {
                   className: _Add2.default.header_wrapper
+              }, void 0, (0, _jsx3.default)('a', {
+                  href: '/'
               }, void 0, (0, _jsx3.default)('img', {
-                  src: img.login
-              }), (0, _jsx3.default)('div', {
+                  src: img.logo
+              })), (0, _jsx3.default)('div', {
                   className: _Add2.default.title
-              }, void 0, 'Technology Book')), (0, _jsx3.default)('div', {
-                  className: _Add2.default.header_wrapper
+              }, void 0, 'Technology Book')), (0, _jsx3.default)('button', {
+                  className: _Add2.default.header_wrapper,
+                  onClick: function onClick() {
+                      _this2.send(_this2.props.text);
+                  }
               }, void 0, (0, _jsx3.default)('div', {
                   className: _Add2.default.header_split
               }), (0, _jsx3.default)('img', {
@@ -4422,6 +4339,79 @@ module.exports =
               }), (0, _jsx3.default)('div', {
                   className: _Add2.default.push_text
               }, void 0, '发布')));
+          }
+      }, {
+          key: 'send',
+          value: function send(text) {
+              if (!text) {
+                  alert("请输入有效内容!");
+                  return;
+              }
+  
+              //获取title标签
+              var titleRegex = text.match(/^#[\s]([^\s]*)/);
+              console.log(titleRegex);
+              if (!titleRegex || !titleRegex[1]) {
+                  alert("标题不可为空, 您可以使用#来标识文章标题!");
+                  return;
+              }
+  
+              var title = titleRegex[1];
+  
+              //获取image标签
+              var imageUrl = void 0;
+              var imgRegex = text.match(/!\[.*?\]\((.*?)\)/);
+              if (imgRegex) imageUrl = imgRegex[1];
+  
+              var rx_escapable = /[\\\"\u0000-\u001f\u007f-\u009f\u00ad\u0600-\u0604\u070f\u17b4\u17b5\u200c-\u200f\u2028-\u202f\u2060-\u206f\ufeff\ufff0-\uffff]/g;
+              var meta = { // table of character substitutions
+                  "\b": "\\b",
+                  "\t": "\\t",
+                  "\n": "\\n",
+                  "\f": "\\f",
+                  "\r": "\\r",
+                  "\"": "\\\"",
+                  "\\": "\\\\"
+              };
+  
+              var quote = function quote(string) {
+  
+                  // If the string contains no control characters, no quote characters, and no
+                  // backslash characters, then we can safely slap some quotes around it.
+                  // Otherwise we must also replace the offending characters with safe escape
+                  // sequences.
+  
+                  rx_escapable.lastIndex = 0;
+                  return rx_escapable.test(string) ? "\"" + string.replace(rx_escapable, function (a) {
+                      var c = meta[a];
+                      return typeof c === "string" ? c : '\\u' + ("0000" + a.charCodeAt(0).toString(16)).slice(-4);
+                  }) + "\"" : "\"" + string + "\"";
+              };
+  
+              var requestText = quote('' + text);
+  
+              fetch('/graphql', {
+                  method: 'post',
+                  headers: {
+                      Accept: 'application/json',
+                      'Content-Type': 'application/json'
+                  },
+                  body: (0, _stringify2.default)({
+                      query: 'mutation{article(title: "' + title + '", content: ' + requestText + ', imageUrl:"' + (imageUrl ? imageUrl : "") + '") {id,imageUrl}}'
+                  }),
+                  credentials: 'include'
+              }).then(function (resp) {
+                  return resp.json();
+              }).then(function (data) {
+                  console.log(data);
+                  if (data.data.article.id) {
+                      alert("发布成功!");
+                  } else {
+                      alert("发布失败!");
+                  }
+              }).catch(function (err) {
+                  alert(err);
+              });
           }
       }]);
       return Header;
