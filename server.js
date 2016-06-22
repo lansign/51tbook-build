@@ -4619,16 +4619,14 @@ module.exports =
                   style: { width: '100%', height: 'auto' },
                   src: imageUrl
               }) : null, (0, _jsx3.default)('div', {
-                  style: { fontSize: 21, padding: 11, display: 'flex' }
-              }, void 0, title), (0, _jsx3.default)('div', {
-                  style: { flexDirection: 'row', flex: 1, padding: 11, display: 'flex' }
-              }, void 0, (0, _jsx3.default)('div', {
-                  style: { fontSize: 12, color: '#989898', display: 'flex' }
-              }, void 0, '作者:', author ? author.displayName : "null"), (0, _jsx3.default)('div', {
-                  style: { marginLeft: 20, fontSize: 12, color: '#989898', display: 'flex' }
-              }, void 0, date.getFullYear(), '-', date.getMonth() + 1, '-', date.getDate()), (0, _jsx3.default)('div', {
-                  style: { marginLeft: 20, fontSize: 12, color: '#989898', display: 'flex' }
-              }, void 0, '阅读133万+'))), (0, _jsx3.default)('dev', {
+                  style: { flexDirection: 'row', flex: 1, paddingLeft: "20px", paddingRight: "20px", paddingTop: "20px", display: 'flex' }
+              }, void 0, (0, _jsx3.default)('img', {
+                  style: { width: '50px', height: '50px', borderRadius: "25px", borderWidth: '1px' },
+                  src: author && author.picture ? author.picture : "http://s1.wacdn.com/wis/6/20124bb62868e77b_195x195.png"
+              }), (0, _jsx3.default)('div', {
+                  style: { paddingLeft: "10px", fontSize: 18, color: '#000000', display: 'flex', 'align-items': 'center', 'justify-content': 'center' }
+              }, void 0, author ? author.displayName : "null"))), (0, _jsx3.default)('div', {
+                  style: { paddingLeft: "20px", paddingRight: "20px", paddingBottom: "20px" },
                   dangerouslySetInnerHTML: { __html: (0, _marked2.default)(content) }
               })));
           }
