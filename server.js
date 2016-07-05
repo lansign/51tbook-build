@@ -108,7 +108,7 @@ module.exports =
   
   var _routes2 = _interopRequireDefault(_routes);
   
-  var _assets = __webpack_require__(120);
+  var _assets = __webpack_require__(121);
   
   var _assets2 = _interopRequireDefault(_assets);
   
@@ -205,7 +205,7 @@ module.exports =
                       case 0:
                         css = [];
                         statusCode = 200;
-                        template = __webpack_require__(121); // eslint-disable-line global-require
+                        template = __webpack_require__(122); // eslint-disable-line global-require
   
                         data = { title: '', description: '', css: '', body: '', entry: _assets2.default.main.js };
   
@@ -296,7 +296,7 @@ module.exports =
   app.use(function (err, req, res, next) {
     // eslint-disable-line no-unused-vars
     console.log(pe.render(err)); // eslint-disable-line no-console
-    var template = __webpack_require__(123); // eslint-disable-line global-require
+    var template = __webpack_require__(124); // eslint-disable-line global-require
     var statusCode = err.status || 500;
     res.status(statusCode);
     res.send(template({
@@ -552,7 +552,8 @@ module.exports =
     website: String,
     location: String,
     accessToken: String,
-    refreshToken: String
+    refreshToken: String,
+    isAdmin: Boolean
   });
   
   Schema.index({ source: 1, sourceId: -1 }, { unique: true });
@@ -1340,7 +1341,8 @@ module.exports =
           id: { type: _graphql.GraphQLID },
           author: { type: _graphql.GraphQLString },
           size: { type: _graphql.GraphQLInt },
-          createTime: { type: _graphql.GraphQLFloat }
+          startTime: { type: _graphql.GraphQLFloat },
+          recommend: { type: _graphql.GraphQLBoolean }
       },
       resolve: function resolve(root, args) {
           return new _promise2.default(function (resolve, reject) {
@@ -1350,7 +1352,12 @@ module.exports =
               if (args.id) {
                   _BookModel2.default.find({ _id: args.id }).populate('author').exec(callback);
               } else {
-                  _BookModel2.default.find(args.author ? { author: args.author } : {}).where('createTime').lte(args.createTime ? args.createTime : new Date().getTime()).sort({ createTime: -1 }).limit(args.size && args.size > 0 && args.size < 500 ? args.size : 500).populate('author').exec(callback);
+                  var query = _BookModel2.default.find(args.author ? { author: args.author } : {}).where('createTime').lte(args.createTime ? args.createTime : new Date().getTime());
+                  console.log(args.recommend);
+                  if (args.recommend) {
+                      query = query.where('recommend', args.recommend);
+                  }
+                  query.sort({ createTime: -1 }).limit(args.size && args.size > 0 && args.size < 500 ? args.size : 500).populate('author').exec(callback);
               }
           });
       }
@@ -1395,6 +1402,7 @@ module.exports =
               content: { type: _graphql.GraphQLString },
               createTime: { type: _graphql.GraphQLFloat },
               editTime: { type: _graphql.GraphQLFloat },
+              recommend: { type: _graphql.GraphQLBoolean },
               author: { type: new _graphql.GraphQLObjectType({
                       name: 'author',
                       fields: function fields() {
@@ -1443,7 +1451,8 @@ module.exports =
       content: String,
       createTime: { type: Number, index: true, default: new Date().getTime() },
       editTime: { type: Number, default: new Date().getTime() },
-      author: { type: String, ref: 'UserModel' }
+      author: { type: String, ref: 'UserModel' },
+      recommend: { type: Boolean, default: false }
   });
   
   exports.default = Book;
@@ -1510,7 +1519,7 @@ module.exports =
                   _BookModel2.default.findById(args.id, function (err, book) {
                       if (err) {
                           reject(err);
-                      } else if (book && book.author === root.request.user._doc._id) {
+                      } else if (book && (book.isAdmin || book.author === root.request.user._doc._id)) {
                           book.title = args.title;
                           book.imageUrl = args.imageUrl;
                           book.thumbnailUrl = args.thumbnailUrl;
@@ -1576,7 +1585,7 @@ module.exports =
               _BookModel2.default.findById(args.id, function (err, book) {
                   if (err) {
                       reject(err);
-                  } else if (book && book.author === root.request.user._doc._id) {
+                  } else if (book && (book.isAdmin || book.author === root.request.user._doc._id)) {
                       _BookModel2.default.findByIdAndRemove(args.id, function (err, book) {
                           if (err) {
                               reject(err);
@@ -1630,59 +1639,37 @@ module.exports =
   
   var _home2 = _interopRequireDefault(_home);
   
-  var _contact = __webpack_require__(92);
+  var _contact = __webpack_require__(94);
   
   var _contact2 = _interopRequireDefault(_contact);
   
-  var _login = __webpack_require__(96);
+  var _login = __webpack_require__(98);
   
   var _login2 = _interopRequireDefault(_login);
   
-  var _content = __webpack_require__(100);
+  var _content = __webpack_require__(102);
   
   var _content2 = _interopRequireDefault(_content);
   
-  var _error = __webpack_require__(104);
+  var _error = __webpack_require__(106);
   
   var _error2 = _interopRequireDefault(_error);
   
-  var _article = __webpack_require__(108);
+  var _add = __webpack_require__(110);
   
-  var _article2 = _interopRequireDefault(_article);
+  var _add2 = _interopRequireDefault(_add);
   
-  var _Edit = __webpack_require__(109);
-  
-  var _Edit2 = _interopRequireDefault(_Edit);
-  
-  var _detail = __webpack_require__(110);
+  var _detail = __webpack_require__(118);
   
   var _detail2 = _interopRequireDefault(_detail);
   
-  var _index = __webpack_require__(111);
-  
-  var _index2 = _interopRequireDefault(_index);
-  
-  var _detail3 = __webpack_require__(118);
-  
-  var _detail4 = _interopRequireDefault(_detail3);
-  
   function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-  
-  // Child routes
-  /**
-   * React Starter Kit (https://www.reactstarterkit.com/)
-   *
-   * Copyright © 2014-2016 Kriasoft, LLC. All rights reserved.
-   *
-   * This source code is licensed under the MIT license found in the
-   * LICENSE.txt file in the root directory of this source tree.
-   */
   
   exports.default = {
   
     path: '/',
   
-    children: [_home2.default, _contact2.default, _login2.default, _content2.default, _error2.default, _article2.default, _detail2.default, _Edit2.default, _index2.default, _detail4.default],
+    children: [_home2.default, _contact2.default, _login2.default, _content2.default, _error2.default, _add2.default, _detail2.default],
   
     action: function action(_ref) {
       var _this = this;
@@ -1723,6 +1710,16 @@ module.exports =
       }))();
     }
   };
+  
+  // Child routes
+  /**
+   * React Starter Kit (https://www.reactstarterkit.com/)
+   *
+   * Copyright © 2014-2016 Kriasoft, LLC. All rights reserved.
+   *
+   * This source code is licensed under the MIT license found in the
+   * LICENSE.txt file in the root directory of this source tree.
+   */
 
 /***/ },
 /* 47 */
@@ -2884,7 +2881,7 @@ module.exports =
   'use strict';
   
   Object.defineProperty(exports, "__esModule", {
-    value: true
+      value: true
   });
   
   var _jsx2 = __webpack_require__(47);
@@ -2907,47 +2904,59 @@ module.exports =
   
   var _Header2 = _interopRequireDefault(_Header);
   
-  var _Home3 = __webpack_require__(90);
+  var _PersonalCenter = __webpack_require__(90);
+  
+  var _PersonalCenter2 = _interopRequireDefault(_PersonalCenter);
+  
+  var _Home3 = __webpack_require__(92);
   
   var _Home4 = _interopRequireDefault(_Home3);
   
   function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
   
-  var title = '技术博客'; /**
-                       * React Starter Kit (https://www.reactstarterkit.com/)
-                       *
-                       * Copyright © 2014-2016 Kriasoft, LLC. All rights reserved.
-                       *
-                       * This source code is licensed under the MIT license found in the
-                       * LICENSE.txt file in the root directory of this source tree.
-                       */
+  /**
+   * React Starter Kit (https://www.reactstarterkit.com/)
+   *
+   * Copyright © 2014-2016 Kriasoft, LLC. All rights reserved.
+   *
+   * This source code is licensed under the MIT license found in the
+   * LICENSE.txt file in the root directory of this source tree.
+   */
   
-  var _ref2 = (0, _jsx3.default)(_Header2.default, {
-    title: '技术博客'
+  var title = '技术博客';
+  
+  var _ref2 = (0, _jsx3.default)(_PersonalCenter2.default, {});
+  
+  var _ref3 = (0, _jsx3.default)(_Header2.default, {
+      title: '技术博客'
   });
   
   function Home(_ref, context) {
-    var books = _ref.books;
+      var books = _ref.books;
   
-    context.setTitle(title);
-    return (0, _jsx3.default)('div', {
-      className: _Home2.default.root
-    }, void 0, _ref2, (0, _jsx3.default)('div', {
-      className: _Home2.default.container
-    }, void 0, (0, _jsx3.default)('ul', {
-      className: _Home2.default.news
-    }, void 0, books.map(function (item, index) {
-      return (0, _jsx3.default)('li', {
-        className: _Home2.default.newsItem
-      }, index, (0, _jsx3.default)(_Home4.default, {
-        book: item
-      }));
-    }))), (0, _jsx3.default)('a', {
-      href: '/article/add'
-    }, void 0, (0, _jsx3.default)('img', {
-      style: { position: 'fixed', bottom: 30, right: 40 },
-      src: __webpack_require__(91)
-    })));
+      context.setTitle(title);
+      return (0, _jsx3.default)('div', {
+          className: _Home2.default.root
+      }, void 0, _ref2, (0, _jsx3.default)('div', {
+          style: { maxWidth: '850px', width: '75%', flexDirection: 'column' }
+      }, void 0, _ref3, (0, _jsx3.default)('div', {
+          className: _Home2.default.container
+      }, void 0, (0, _jsx3.default)('ul', {
+          className: _Home2.default.news
+      }, void 0, books.map(function (item, index) {
+          return (0, _jsx3.default)('li', {
+              className: _Home2.default.newsItem
+          }, index, (0, _jsx3.default)(_Home4.default, {
+              book: item
+          }));
+      }))), (0, _jsx3.default)('a', {
+          href: '/article/add'
+      }, void 0, (0, _jsx3.default)('div', {
+          style: { display: 'flex', position: 'fixed', height: 50, width: 50, backgroundColor: '#d94b40',
+              bottom: 30, right: 40, borderRadius: "25px", borderWidth: '1px', alignItems: 'center', justifyContent: 'center' }
+      }, void 0, (0, _jsx3.default)('img', {
+          src: __webpack_require__(93)
+      })))));
   }
   
   Home.contextTypes = { setTitle: _react.PropTypes.func.isRequired };
@@ -2980,7 +2989,7 @@ module.exports =
   
   
   // module
-  exports.push([module.id, "._2Yej{margin:0 auto;padding:0 0 40px;max-width:1000px}.oTyG{padding:0}._3Ob1{list-style-type:none;padding-bottom:6px}._1yWV{font-size:1.125em}._1yWV,._21LX{display:block}._1VMY{display:-webkit-box;display:-ms-flexbox;display:flex;-webkit-box-flex:1;-ms-flex:1;flex:1;background-color:#fff;-webkit-box-pack:justify;-ms-flex-pack:justify;justify-content:space-between;-webkit-box-orient:vertical;-webkit-box-direction:normal;-ms-flex-direction:column;flex-direction:column}", ""]);
+  exports.push([module.id, "._2IMq{display:-webkit-box;display:-ms-flexbox;display:flex;height:100%;-webkit-box-orient:horizontal;-webkit-box-direction:normal;-ms-flex-direction:row;flex-direction:row}._2Yej{margin:0 auto;padding:0 0 40px;max-width:1000px}.oTyG{padding:0}._3Ob1{list-style-type:none;padding-bottom:6px}._1yWV{font-size:1.125em}._1yWV,._21LX{display:block}._1VMY{display:-webkit-box;display:-ms-flexbox;display:flex;-webkit-box-flex:1;-ms-flex:1;flex:1;background-color:#fff;-webkit-box-pack:justify;-ms-flex-pack:justify;justify-content:space-between;-webkit-box-orient:vertical;-webkit-box-direction:normal;-ms-flex-direction:column;flex-direction:column}", ""]);
   
   // exports
   exports.locals = {
@@ -3062,6 +3071,110 @@ module.exports =
   
   var _jsx3 = _interopRequireDefault(_jsx2);
   
+  var _getPrototypeOf = __webpack_require__(50);
+  
+  var _getPrototypeOf2 = _interopRequireDefault(_getPrototypeOf);
+  
+  var _classCallCheck2 = __webpack_require__(51);
+  
+  var _classCallCheck3 = _interopRequireDefault(_classCallCheck2);
+  
+  var _createClass2 = __webpack_require__(52);
+  
+  var _createClass3 = _interopRequireDefault(_createClass2);
+  
+  var _possibleConstructorReturn2 = __webpack_require__(53);
+  
+  var _possibleConstructorReturn3 = _interopRequireDefault(_possibleConstructorReturn2);
+  
+  var _inherits2 = __webpack_require__(54);
+  
+  var _inherits3 = _interopRequireDefault(_inherits2);
+  
+  var _react = __webpack_require__(48);
+  
+  var _react2 = _interopRequireDefault(_react);
+  
+  function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+  
+  var PersonalCenter = function (_Component) {
+      (0, _inherits3.default)(PersonalCenter, _Component);
+  
+  
+      // 构造
+  
+      function PersonalCenter(props) {
+          (0, _classCallCheck3.default)(this, PersonalCenter);
+  
+          // 初始状态
+  
+          var _this = (0, _possibleConstructorReturn3.default)(this, (0, _getPrototypeOf2.default)(PersonalCenter).call(this, props));
+  
+          _this.state = {
+              windowWidth: window.innerWidth
+          };
+  
+          return _this;
+      }
+  
+      (0, _createClass3.default)(PersonalCenter, [{
+          key: 'handleResize',
+          value: function handleResize(e) {
+              this.setState({ windowWidth: window.innerWidth });
+          }
+      }, {
+          key: 'componentDidMount',
+          value: function componentDidMount() {
+              window.addEventListener('resize', this.handleResize);
+          }
+      }, {
+          key: 'componentWillUnmount',
+          value: function componentWillUnmount() {
+              window.removeEventListener('resize', this.handleResize);
+          }
+      }, {
+          key: 'render',
+          value: function render() {
+              console.log(this.state.windowWidth, window.innerWidth);
+              if (this.state.windowWidth < 600) {
+                  return null;
+              }
+  
+              return (0, _jsx3.default)('div', {
+                  style: { width: '25%', height: '100%' }
+              }, void 0, (0, _jsx3.default)('img', {
+                  style: { position: 'fixed', width: '25%', height: '100%' },
+                  src: __webpack_require__(91)
+              }));
+          }
+      }]);
+      return PersonalCenter;
+  }(_react.Component); /**
+                        * Created by lan on 16/7/5.
+                        */
+  
+  exports.default = PersonalCenter;
+
+/***/ },
+/* 91 */
+/***/ function(module, exports, __webpack_require__) {
+
+  module.exports = __webpack_require__.p + "37c184ca0404ef17ef9196fe5cf7adf6.jpg";
+
+/***/ },
+/* 92 */
+/***/ function(module, exports, __webpack_require__) {
+
+  'use strict';
+  
+  Object.defineProperty(exports, "__esModule", {
+      value: true
+  });
+  
+  var _jsx2 = __webpack_require__(47);
+  
+  var _jsx3 = _interopRequireDefault(_jsx2);
+  
   var _react = __webpack_require__(48);
   
   var _react2 = _interopRequireDefault(_react);
@@ -3115,13 +3228,13 @@ module.exports =
   exports.default = (0, _withStyles2.default)(_Home2.default)(CardWrapper);
 
 /***/ },
-/* 91 */
+/* 93 */
 /***/ function(module, exports) {
 
-  module.exports = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADcAAAA3CAYAAACo29JGAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAA3ppVFh0WE1MOmNvbS5hZG9iZS54bXAAAAAAADw/eHBhY2tldCBiZWdpbj0i77u/IiBpZD0iVzVNME1wQ2VoaUh6cmVTek5UY3prYzlkIj8+IDx4OnhtcG1ldGEgeG1sbnM6eD0iYWRvYmU6bnM6bWV0YS8iIHg6eG1wdGs9IkFkb2JlIFhNUCBDb3JlIDUuNi1jMDY3IDc5LjE1Nzc0NywgMjAxNS8wMy8zMC0yMzo0MDo0MiAgICAgICAgIj4gPHJkZjpSREYgeG1sbnM6cmRmPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIj4gPHJkZjpEZXNjcmlwdGlvbiByZGY6YWJvdXQ9IiIgeG1sbnM6eG1wTU09Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC9tbS8iIHhtbG5zOnN0UmVmPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvc1R5cGUvUmVzb3VyY2VSZWYjIiB4bWxuczp4bXA9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC8iIHhtcE1NOk9yaWdpbmFsRG9jdW1lbnRJRD0iQzI1RDk1NTQ4MTdBQ0FFOEJBNUE2Qjg2RUI1QUIzNEMiIHhtcE1NOkRvY3VtZW50SUQ9InhtcC5kaWQ6QTBGREU0NTQzMDgwMTFFNkEyMTI5RTMxOUQ2MjQ1RTEiIHhtcE1NOkluc3RhbmNlSUQ9InhtcC5paWQ6QTBGREU0NTMzMDgwMTFFNkEyMTI5RTMxOUQ2MjQ1RTEiIHhtcDpDcmVhdG9yVG9vbD0iQWRvYmUgUGhvdG9zaG9wIENDIDIwMTUgKE1hY2ludG9zaCkiPiA8eG1wTU06RGVyaXZlZEZyb20gc3RSZWY6aW5zdGFuY2VJRD0ieG1wLmlpZDpkYzk0ODcwZi05ZjM0LTRiOTgtYTRiMy0xMTQ2NTQ4YmNlZDgiIHN0UmVmOmRvY3VtZW50SUQ9ImFkb2JlOmRvY2lkOnBob3Rvc2hvcDphZjZkM2ZmMi02NDdkLTExNzktYTY1Ni1jZjc4YWE5NzkzY2QiLz4gPC9yZGY6RGVzY3JpcHRpb24+IDwvcmRmOlJERj4gPC94OnhtcG1ldGE+IDw/eHBhY2tldCBlbmQ9InIiPz7JA/U8AAADqklEQVR42tyaT0gUURzHf61raootgn9YD20SG4ghdNBEqw2iS0mXLaguddK1P9TFU3SwUx26SJLSQYLKtA6xQreM7J8IQRRoC6WHsFVR1tDSWqPfr/mtPHV29s/M7M68L3wvszvv/T7zfjPvzZvfls9HfWCwitAH0PvQu9mlfLwY/QO9iJ5Fh9Dj6Hfol3w8JXkHh+L+5jQIyIU+iT6FbkrQbjHbja4VjkfRr9EP0I/QC3qDcug834PuQofR3WifjgtG5x3kdsLcricbcDRSnZxWAXSewamdz+2GuB9XpuD86DH0BXQumKtc7meM+zUNjq7mbfQAugIyqwrut4vjMBSuBP0c3QbZVYDjKDEKrhI9jG4Aa6iB46nUC0fz0zN0NVhL1RxXabpwlNtB9B6wpiiuYOjYofx04G6h68Haquc4U4Lz881rBwVw9PzJwsUmaDupEwFdycB1ZGEeM2IevJ4Ibge6FeypVhw9jxZcewaWVGbJyfGrwtGsfw7srbM4eiVqcKfRBTaHo/jPqL2snjCrR8e2Qtj58Om6Y5EnfTB3764Z3fljT3uHkJKNIIcaY6kZg6OtgRxJ4HKYZw2uDuRSnQhXIxlcjQhXJRlclQhXLhlcuTgVbNfbmrvjpsYtvvlZVbTfB3m7vHFPmbrWricclwine2uuoHZvamulsor/NklbxbRckSwtf4twC5LBRcS0nEaX6Wnt14f3mvdcQU3tukPRmTD8+T5lFty0CDcBOjeCtB4AamvLxeEXZq0tSV/FtPwoWVp+EuFGJYMbFeFoB3dVErBV5lmDmwflw58MeuMdHJrf+Cb+WBK4AbVthvv0RLc52DIon503bTPQUPaCCTvNf38uwZfjhzMB14spOac2ciRa/UZtOmoU94118+uGP0yC8sHdjurGUZvUgiNdjS1fbKQZjhsSwdGi85LN4C7iqEWSgSP1o+/YKB37Vde0GiddQY9YHIziuxx3wZ5gzmgGpQbEiqK4mnHUltOBI1Hx2RFQis+spHGOa1brT8mUanwDZQd3xEKp2MRxgV44Es36PnRPlsF6OI65ZP6cSnkU5XYLKGWHMxmGmuV+WzgOMBoupj5QCkS7MrBUi3I/Xu43JaVbkkgT5nnulFLF6K3BFV4GermfSDqN6C0mneBUcfPbxCsdb/Sr/MIc4PZauf20ZVQZ8DyvaMhU4ksVrw185cm0bUg1zoXoJTatX0Pst6DUOBu6f+o04T6hAu0gO6tygMT6J8AALmLEU0fm0tQAAAAASUVORK5CYII="
+  module.exports = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABkAAAAaCAYAAABCfffNAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAyhpVFh0WE1MOmNvbS5hZG9iZS54bXAAAAAAADw/eHBhY2tldCBiZWdpbj0i77u/IiBpZD0iVzVNME1wQ2VoaUh6cmVTek5UY3prYzlkIj8+IDx4OnhtcG1ldGEgeG1sbnM6eD0iYWRvYmU6bnM6bWV0YS8iIHg6eG1wdGs9IkFkb2JlIFhNUCBDb3JlIDUuNi1jMDY3IDc5LjE1Nzc0NywgMjAxNS8wMy8zMC0yMzo0MDo0MiAgICAgICAgIj4gPHJkZjpSREYgeG1sbnM6cmRmPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5LzAyLzIyLXJkZi1zeW50YXgtbnMjIj4gPHJkZjpEZXNjcmlwdGlvbiByZGY6YWJvdXQ9IiIgeG1sbnM6eG1wPSJodHRwOi8vbnMuYWRvYmUuY29tL3hhcC8xLjAvIiB4bWxuczp4bXBNTT0iaHR0cDovL25zLmFkb2JlLmNvbS94YXAvMS4wL21tLyIgeG1sbnM6c3RSZWY9Imh0dHA6Ly9ucy5hZG9iZS5jb20veGFwLzEuMC9zVHlwZS9SZXNvdXJjZVJlZiMiIHhtcDpDcmVhdG9yVG9vbD0iQWRvYmUgUGhvdG9zaG9wIENDIDIwMTUgKE1hY2ludG9zaCkiIHhtcE1NOkluc3RhbmNlSUQ9InhtcC5paWQ6QkU4REEzRkQzOUJCMTFFNjk0NDc5ODZCNEZDQkE4QzUiIHhtcE1NOkRvY3VtZW50SUQ9InhtcC5kaWQ6QkU4REEzRkUzOUJCMTFFNjk0NDc5ODZCNEZDQkE4QzUiPiA8eG1wTU06RGVyaXZlZEZyb20gc3RSZWY6aW5zdGFuY2VJRD0ieG1wLmlpZDpCRThEQTNGQjM5QkIxMUU2OTQ0Nzk4NkI0RkNCQThDNSIgc3RSZWY6ZG9jdW1lbnRJRD0ieG1wLmRpZDpCRThEQTNGQzM5QkIxMUU2OTQ0Nzk4NkI0RkNCQThDNSIvPiA8L3JkZjpEZXNjcmlwdGlvbj4gPC9yZGY6UkRGPiA8L3g6eG1wbWV0YT4gPD94cGFja2V0IGVuZD0iciI/Pr3fjG4AAAG2SURBVHjatJZLSgNBEIbzMGoiohjFZ1BxISruNAvxAoLg0o0Blx7Cg4jgFdSNF9CtCxXcqEggPsCFMcFRwhjbv+QPikxNd2RS8DEzNd39M9VV1RM3xsQcbQnkwALIg2NwCM5APXSmiDiQNT/mkzLYAxnbfFeRLRNsIjRhm59wDFVO8feCTttkV5GU4n8H5ahEHhT/M2iLSuRK8XeB7qhE+kP2pMc2+fenpsEnqAWMC1voXvG381qPsxhnwSJfVMATmAcj3PRpsBqwkAe2Oa4PnIMSMy7FpCiKiMT1lV/hkQpDMWiJhFT6IxgGyYD3VXAgImu42W9if5o1TxaebKHAdwbK4jOx1pov4TrBzXIrVUSkgOsOq1f4YKZIeo9xXCmkf8mcDDPqhQUqmfUGbsGpiHTgZpP1cQcuOVD8WYrOgV1FZAPccJwPRrkFHtc70tqziCeIPK8b3fIgGdbqteZmSMPG+RwPGFu2nYyuqVv9I9qwGt/Fojh+V5RQXbscv818SWB2Ku3kX+GaUvzSGIeiEtEWSlt/h1yOTiVcjRq4YMFZK95FRDpAgUfCALOqKG3cZfKXAAMA5g+mSmGPwaQAAAAASUVORK5CYII="
 
 /***/ },
-/* 92 */
+/* 94 */
 /***/ function(module, exports, __webpack_require__) {
 
   'use strict';
@@ -3138,7 +3251,7 @@ module.exports =
   
   var _react2 = _interopRequireDefault(_react);
   
-  var _Contact = __webpack_require__(93);
+  var _Contact = __webpack_require__(95);
   
   var _Contact2 = _interopRequireDefault(_Contact);
   
@@ -3165,7 +3278,7 @@ module.exports =
   };
 
 /***/ },
-/* 93 */
+/* 95 */
 /***/ function(module, exports, __webpack_require__) {
 
   'use strict';
@@ -3186,7 +3299,7 @@ module.exports =
   
   var _withStyles2 = _interopRequireDefault(_withStyles);
   
-  var _Contact = __webpack_require__(94);
+  var _Contact = __webpack_require__(96);
   
   var _Contact2 = _interopRequireDefault(_Contact);
   
@@ -3219,11 +3332,11 @@ module.exports =
   exports.default = (0, _withStyles2.default)(_Contact2.default)(Contact);
 
 /***/ },
-/* 94 */
+/* 96 */
 /***/ function(module, exports, __webpack_require__) {
 
   
-      var content = __webpack_require__(95);
+      var content = __webpack_require__(97);
       var insertCss = __webpack_require__(59);
   
       if (typeof content === 'string') {
@@ -3236,7 +3349,7 @@ module.exports =
     
 
 /***/ },
-/* 95 */
+/* 97 */
 /***/ function(module, exports, __webpack_require__) {
 
   exports = module.exports = __webpack_require__(58)();
@@ -3253,7 +3366,7 @@ module.exports =
   };
 
 /***/ },
-/* 96 */
+/* 98 */
 /***/ function(module, exports, __webpack_require__) {
 
   'use strict';
@@ -3270,7 +3383,7 @@ module.exports =
   
   var _react2 = _interopRequireDefault(_react);
   
-  var _Login = __webpack_require__(97);
+  var _Login = __webpack_require__(99);
   
   var _Login2 = _interopRequireDefault(_Login);
   
@@ -3299,7 +3412,7 @@ module.exports =
   };
 
 /***/ },
-/* 97 */
+/* 99 */
 /***/ function(module, exports, __webpack_require__) {
 
   'use strict';
@@ -3340,7 +3453,7 @@ module.exports =
   
   var _withStyles2 = _interopRequireDefault(_withStyles);
   
-  var _Login = __webpack_require__(98);
+  var _Login = __webpack_require__(100);
   
   var _Login2 = _interopRequireDefault(_Login);
   
@@ -3362,8 +3475,6 @@ module.exports =
    */
   
   var _ref2 = (0, _jsx3.default)('span', {}, void 0, 'Log in with GitHub');
-  
-  var _ref3 = (0, _jsx3.default)('span', {}, void 0, 'Log in with Google');
   
   var Login = function (_Component) {
     (0, _inherits3.default)(Login, _Component);
@@ -3407,20 +3518,7 @@ module.exports =
           width: '30',
           viewBox: '0 0 16 16',
           xmlns: 'http://www.w3.org/2000/svg'
-        }, void 0, _ref, '/>'), _ref2)), (0, _jsx3.default)('div', {
-          className: _Login2.default.formGroup
-        }, void 0, (0, _jsx3.default)('a', {
-          className: _Login2.default.google,
-          href: '/login/google'
-        }, void 0, (0, _jsx3.default)('svg', {
-          className: _Login2.default.icon,
-          width: '30',
-          height: '30',
-          viewBox: '0 0 30 30',
-          xmlns: 'http://www.w3.org/2000/svg'
-        }, void 0, (0, _jsx3.default)('path', {
-          d: 'M30 13h-4V9h-2v4h-4v2h4v4h2v-4h4m-15 2s-2-1.15-2-2c0 0-.5-1.828 1-3 ' + '1.537-1.2 3-3.035 3-5 0-2.336-1.046-5-3-6h3l2.387-1H10C5.835 0 2 3.345 2 7c0 ' + '3.735 2.85 6.56 7.086 6.56.295 0 .58-.006.86-.025-.273.526-.47 1.12-.47 1.735 ' + '0 1.037.817 2.042 1.523 2.73H9c-5.16 0-9 2.593-9 6 0 3.355 4.87 6 10.03 6 5.882 ' + '0 9.97-3 9.97-7 0-2.69-2.545-4.264-5-6zm-4-4c-2.395 0-5.587-2.857-6-6C4.587 ' + '3.856 6.607.93 9 1c2.394.07 4.603 2.908 5.017 6.052C14.43 10.195 13 13 11 ' + '13zm-1 15c-3.566 0-7-1.29-7-4 0-2.658 3.434-5.038 7-5 .832.01 2 0 2 0 1 0 ' + '2.88.88 4 2 1 1 1 2.674 1 3 0 3-1.986 4-7 4z'
-        })), _ref3))));
+        }, void 0, _ref, '/>'), _ref2))));
       }
     }]);
     return Login;
@@ -3429,11 +3527,11 @@ module.exports =
   exports.default = (0, _withStyles2.default)(_Login2.default)(Login);
 
 /***/ },
-/* 98 */
+/* 100 */
 /***/ function(module, exports, __webpack_require__) {
 
   
-      var content = __webpack_require__(99);
+      var content = __webpack_require__(101);
       var insertCss = __webpack_require__(59);
   
       if (typeof content === 'string') {
@@ -3446,7 +3544,7 @@ module.exports =
     
 
 /***/ },
-/* 99 */
+/* 101 */
 /***/ function(module, exports, __webpack_require__) {
 
   exports = module.exports = __webpack_require__(58)();
@@ -3474,7 +3572,7 @@ module.exports =
   };
 
 /***/ },
-/* 100 */
+/* 102 */
 /***/ function(module, exports, __webpack_require__) {
 
   'use strict';
@@ -3499,7 +3597,7 @@ module.exports =
   
   var _react2 = _interopRequireDefault(_react);
   
-  var _Content = __webpack_require__(101);
+  var _Content = __webpack_require__(103);
   
   var _Content2 = _interopRequireDefault(_Content);
   
@@ -3583,7 +3681,7 @@ module.exports =
       */
 
 /***/ },
-/* 101 */
+/* 103 */
 /***/ function(module, exports, __webpack_require__) {
 
   'use strict';
@@ -3624,7 +3722,7 @@ module.exports =
   
   var _withStyles2 = _interopRequireDefault(_withStyles);
   
-  var _Content = __webpack_require__(102);
+  var _Content = __webpack_require__(104);
   
   var _Content2 = _interopRequireDefault(_Content);
   
@@ -3671,11 +3769,11 @@ module.exports =
   exports.default = (0, _withStyles2.default)(_Content2.default)(Content);
 
 /***/ },
-/* 102 */
+/* 104 */
 /***/ function(module, exports, __webpack_require__) {
 
   
-      var content = __webpack_require__(103);
+      var content = __webpack_require__(105);
       var insertCss = __webpack_require__(59);
   
       if (typeof content === 'string') {
@@ -3688,7 +3786,7 @@ module.exports =
     
 
 /***/ },
-/* 103 */
+/* 105 */
 /***/ function(module, exports, __webpack_require__) {
 
   exports = module.exports = __webpack_require__(58)();
@@ -3705,7 +3803,7 @@ module.exports =
   };
 
 /***/ },
-/* 104 */
+/* 106 */
 /***/ function(module, exports, __webpack_require__) {
 
   'use strict';
@@ -3726,7 +3824,7 @@ module.exports =
   
   var _App2 = _interopRequireDefault(_App);
   
-  var _ErrorPage = __webpack_require__(105);
+  var _ErrorPage = __webpack_require__(107);
   
   var _ErrorPage2 = _interopRequireDefault(_ErrorPage);
   
@@ -3758,7 +3856,7 @@ module.exports =
       */
 
 /***/ },
-/* 105 */
+/* 107 */
 /***/ function(module, exports, __webpack_require__) {
 
   'use strict';
@@ -3779,7 +3877,7 @@ module.exports =
   
   var _withStyles2 = _interopRequireDefault(_withStyles);
   
-  var _ErrorPage = __webpack_require__(106);
+  var _ErrorPage = __webpack_require__(108);
   
   var _ErrorPage2 = _interopRequireDefault(_ErrorPage);
   
@@ -3816,11 +3914,11 @@ module.exports =
   exports.default = (0, _withStyles2.default)(_ErrorPage2.default)(ErrorPage);
 
 /***/ },
-/* 106 */
+/* 108 */
 /***/ function(module, exports, __webpack_require__) {
 
   
-      var content = __webpack_require__(107);
+      var content = __webpack_require__(109);
       var insertCss = __webpack_require__(59);
   
       if (typeof content === 'string') {
@@ -3833,7 +3931,7 @@ module.exports =
     
 
 /***/ },
-/* 107 */
+/* 109 */
 /***/ function(module, exports, __webpack_require__) {
 
   exports = module.exports = __webpack_require__(58)();
@@ -3845,128 +3943,6 @@ module.exports =
   
   // exports
 
-
-/***/ },
-/* 108 */
-/***/ function(module, exports, __webpack_require__) {
-
-  'use strict';
-  
-  Object.defineProperty(exports, "__esModule", {
-      value: true
-  });
-  
-  var _jsx2 = __webpack_require__(47);
-  
-  var _jsx3 = _interopRequireDefault(_jsx2);
-  
-  var _App = __webpack_require__(49);
-  
-  var _App2 = _interopRequireDefault(_App);
-  
-  var _Edit = __webpack_require__(109);
-  
-  var _Edit2 = _interopRequireDefault(_Edit);
-  
-  var _detail = __webpack_require__(110);
-  
-  var _detail2 = _interopRequireDefault(_detail);
-  
-  var _react = __webpack_require__(48);
-  
-  var _react2 = _interopRequireDefault(_react);
-  
-  var _withStyles = __webpack_require__(63);
-  
-  var _withStyles2 = _interopRequireDefault(_withStyles);
-  
-  function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-  
-  var _ref2 = (0, _jsx3.default)('div', {}, void 0, (0, _jsx3.default)('p', {}, void 0, 'page List2')); /**
-                                                                                                         * Created by lan on 16/6/1.
-                                                                                                         */
-  
-  function List(_ref, context) {
-      var list = _ref.list;
-  
-      return _ref2;
-  }
-  
-  var _ref4 = (0, _jsx3.default)(List, {});
-  
-  exports.default = {
-  
-      path: '/article',
-  
-      action: function action(_ref3) {
-          var render = _ref3.render;
-          var context = _ref3.context;
-  
-          return render((0, _jsx3.default)(_App2.default, {
-              context: context
-          }, void 0, _ref4));
-      }
-  };
-
-/***/ },
-/* 109 */
-/***/ function(module, exports, __webpack_require__) {
-
-  'use strict';
-  
-  Object.defineProperty(exports, "__esModule", {
-      value: true
-  });
-  
-  var _jsx2 = __webpack_require__(47);
-  
-  var _jsx3 = _interopRequireDefault(_jsx2);
-  
-  var _App = __webpack_require__(49);
-  
-  var _App2 = _interopRequireDefault(_App);
-  
-  var _detail = __webpack_require__(110);
-  
-  var _detail2 = _interopRequireDefault(_detail);
-  
-  var _react = __webpack_require__(48);
-  
-  var _react2 = _interopRequireDefault(_react);
-  
-  var _withStyles = __webpack_require__(63);
-  
-  var _withStyles2 = _interopRequireDefault(_withStyles);
-  
-  function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-  
-  /**
-   * Created by lan on 16/6/1.
-   */
-  
-  var _ref2 = (0, _jsx3.default)('div', {}, void 0, (0, _jsx3.default)('p', {}, void 0, 'page Edit'));
-  
-  function Edit(_ref, context) {
-      var list = _ref.list;
-  
-      return _ref2;
-  }
-  
-  var _ref4 = (0, _jsx3.default)(Edit, {});
-  
-  exports.default = {
-  
-      path: '/article/edit/:id',
-  
-      action: function action(_ref3) {
-          var render = _ref3.render;
-          var context = _ref3.context;
-  
-          return render((0, _jsx3.default)(_App2.default, {
-              context: context
-          }, void 0, _ref4));
-      }
-  };
 
 /***/ },
 /* 110 */
@@ -3982,60 +3958,6 @@ module.exports =
   
   var _jsx3 = _interopRequireDefault(_jsx2);
   
-  var _react = __webpack_require__(48);
-  
-  var _react2 = _interopRequireDefault(_react);
-  
-  var _App = __webpack_require__(49);
-  
-  var _App2 = _interopRequireDefault(_App);
-  
-  var _withStyles = __webpack_require__(63);
-  
-  var _withStyles2 = _interopRequireDefault(_withStyles);
-  
-  function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-  
-  var _ref2 = (0, _jsx3.default)('div', {}, void 0, (0, _jsx3.default)('p', {}, void 0, 'page Detail')); /**
-                                                                                                          * Created by lan on 16/6/1.
-                                                                                                          */
-  
-  function Detail(_ref, context) {
-      var article = _ref.article;
-  
-      return _ref2;
-  }
-  
-  var _ref4 = (0, _jsx3.default)(Detail, {});
-  
-  exports.default = {
-  
-      path: '/article/detail/:id',
-  
-      action: function action(_ref3) {
-          var render = _ref3.render;
-          var context = _ref3.context;
-  
-          return render((0, _jsx3.default)(_App2.default, {
-              context: context
-          }, void 0, _ref4));
-      }
-  };
-
-/***/ },
-/* 111 */
-/***/ function(module, exports, __webpack_require__) {
-
-  'use strict';
-  
-  Object.defineProperty(exports, "__esModule", {
-      value: true
-  });
-  
-  var _jsx2 = __webpack_require__(47);
-  
-  var _jsx3 = _interopRequireDefault(_jsx2);
-  
   var _App = __webpack_require__(49);
   
   var _App2 = _interopRequireDefault(_App);
@@ -4044,7 +3966,7 @@ module.exports =
   
   var _react2 = _interopRequireDefault(_react);
   
-  var _Add = __webpack_require__(112);
+  var _Add = __webpack_require__(111);
   
   var _Add2 = _interopRequireDefault(_Add);
   
@@ -4070,7 +3992,7 @@ module.exports =
       */
 
 /***/ },
-/* 112 */
+/* 111 */
 /***/ function(module, exports, __webpack_require__) {
 
   'use strict';
@@ -4107,7 +4029,7 @@ module.exports =
   
   var _react2 = _interopRequireDefault(_react);
   
-  var _withStyles = __webpack_require__(63);
+  var _withStyles = __webpack_require__(112);
   
   var _withStyles2 = _interopRequireDefault(_withStyles);
   
@@ -4119,9 +4041,9 @@ module.exports =
   
   var _fetch2 = _interopRequireDefault(_fetch);
   
-  var _Add3 = __webpack_require__(115);
+  var _AddHeader = __webpack_require__(115);
   
-  var _Add4 = _interopRequireDefault(_Add3);
+  var _AddHeader2 = _interopRequireDefault(_AddHeader);
   
   function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
   
@@ -4165,7 +4087,7 @@ module.exports =
               return (0, _jsx3.default)('div', {
                   id: 'add',
                   className: _Add2.default.root
-              }, void 0, (0, _jsx3.default)(_Add4.default, {
+              }, void 0, (0, _jsx3.default)(_AddHeader2.default, {
                   text: this.state.text
               }), (0, _jsx3.default)('div', {
                   className: _Add2.default.center
@@ -4202,6 +4124,94 @@ module.exports =
   exports.default = (0, _withStyles2.default)(_Add2.default)(Add);
 
 /***/ },
+/* 112 */
+/***/ function(module, exports, __webpack_require__) {
+
+  'use strict';
+  
+  Object.defineProperty(exports, "__esModule", {
+    value: true
+  });
+  
+  var _getPrototypeOf = __webpack_require__(50);
+  
+  var _getPrototypeOf2 = _interopRequireDefault(_getPrototypeOf);
+  
+  var _classCallCheck2 = __webpack_require__(51);
+  
+  var _classCallCheck3 = _interopRequireDefault(_classCallCheck2);
+  
+  var _createClass2 = __webpack_require__(52);
+  
+  var _createClass3 = _interopRequireDefault(_createClass2);
+  
+  var _possibleConstructorReturn2 = __webpack_require__(53);
+  
+  var _possibleConstructorReturn3 = _interopRequireDefault(_possibleConstructorReturn2);
+  
+  var _inherits2 = __webpack_require__(54);
+  
+  var _inherits3 = _interopRequireDefault(_inherits2);
+  
+  var _react = __webpack_require__(48);
+  
+  var _react2 = _interopRequireDefault(_react);
+  
+  function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+  
+  function getDisplayName(ComposedComponent) {
+    return ComposedComponent.displayName || ComposedComponent.name || 'Component';
+  } /**
+     * Isomorphic CSS style loader for Webpack
+     *
+     * Copyright © 2015-2016 Kriasoft, LLC. All rights reserved.
+     *
+     * This source code is licensed under the MIT license found in the
+     * LICENSE.txt file in the root directory of this source tree.
+     */
+  
+  function withStyles() {
+    for (var _len = arguments.length, styles = Array(_len), _key = 0; _key < _len; _key++) {
+      styles[_key] = arguments[_key];
+    }
+  
+    return function (ComposedComponent) {
+      var _class, _temp;
+  
+      return _temp = _class = function (_Component) {
+        (0, _inherits3.default)(WithStyles, _Component);
+  
+        function WithStyles() {
+          (0, _classCallCheck3.default)(this, WithStyles);
+          return (0, _possibleConstructorReturn3.default)(this, (0, _getPrototypeOf2.default)(WithStyles).apply(this, arguments));
+        }
+  
+        (0, _createClass3.default)(WithStyles, [{
+          key: 'componentWillMount',
+          value: function componentWillMount() {
+            this.removeCss = this.context.insertCss.apply(undefined, styles);
+          }
+        }, {
+          key: 'componentWillUnmount',
+          value: function componentWillUnmount() {
+            setTimeout(this.removeCss, 0);
+          }
+        }, {
+          key: 'render',
+          value: function render() {
+            return _react2.default.createElement(ComposedComponent, this.props);
+          }
+        }]);
+        return WithStyles;
+      }(_react.Component), _class.contextTypes = {
+        insertCss: _react.PropTypes.func.isRequired
+      }, _class.displayName = 'WithStyles(' + getDisplayName(ComposedComponent) + ')', _class.ComposedComponent = ComposedComponent, _temp;
+    };
+  }
+  
+  exports.default = withStyles;
+
+/***/ },
 /* 113 */
 /***/ function(module, exports, __webpack_require__) {
 
@@ -4227,22 +4237,22 @@ module.exports =
   
   
   // module
-  exports.push([module.id, "body,html{font-family:Arial,Segoe UI,HelveticaNeue-Light,sans-serif;height:100%;background:#e9e9e9}._1r8b{-webkit-box-orient:vertical;-ms-flex-direction:column;flex-direction:column}._1r8b,.BliM{display:-webkit-box;display:-ms-flexbox;display:flex;height:100%;-webkit-box-direction:normal}.BliM{-webkit-box-orient:horizontal;-ms-flex-direction:row;flex-direction:row}._28J4{background-image:-webkit-gradient(linear,left top,left bottom,from(#ef6f5e),to(#da3c30));background-image:-webkit-linear-gradient(top,#ef6f5e,#da3c30);background-image:linear-gradient(-180deg,#ef6f5e,#da3c30);width:100%;height:50px;-webkit-box-pack:justify;-ms-flex-pack:justify;justify-content:space-between}._28J4,.uD_P{display:-webkit-box;display:-ms-flexbox;display:flex;-webkit-box-align:center;-ms-flex-align:center;align-items:center}.uD_P{-webkit-box-orient:horizontal;-webkit-box-direction:normal;-ms-flex-direction:row;flex-direction:row;margin-left:26px;margin-right:26px;background-color:transparent;border:1px solid transparent}.vvC1{margin-left:20px}._17KC,.vvC1{font-family:Roboto-Medium;font-size:20px;color:#fff;letter-spacing:0;text-align:left}._17KC{margin-left:10px}._14cB{width:1px;background-color:#fff;height:34px;margin-right:30px}.LP3A{width:50%;background-color:transparent;resize:none;font-size:15px;outline:none;border-style:none;padding-left:25px;padding-top:25px;padding-right:25px}.bVxo{float:right;width:50%;height:100%;background-color:#fff;box-sizing:border-box}._2i1O{float:left;height:100%;width:100%;overflow-y:auto;padding-left:25px;padding-top:25px;padding-right:25px}.mORg{background-image:-webkit-gradient(linear,left top,left bottom,from(#ef6f5e),to(#da3c30));background-image:-webkit-linear-gradient(top,#ef6f5e,#da3c30);background-image:linear-gradient(-180deg,#ef6f5e,#da3c30);width:100%;height:60px;font-size:20px;color:#fff}.mORg,.yjnR{border:none;outline:none}", ""]);
+  exports.push([module.id, "body,html{font-family:Arial,Segoe UI,HelveticaNeue-Light,sans-serif;height:100%;background:#e9e9e9}._3Hr_{-webkit-box-orient:vertical;-ms-flex-direction:column;flex-direction:column}._1v9E,._3Hr_{display:-webkit-box;display:-ms-flexbox;display:flex;height:100%;-webkit-box-direction:normal}._1v9E{-webkit-box-orient:horizontal;-ms-flex-direction:row;flex-direction:row}._1PcW{background-image:-webkit-gradient(linear,left top,left bottom,from(#ef6f5e),to(#da3c30));background-image:-webkit-linear-gradient(top,#ef6f5e,#da3c30);background-image:linear-gradient(-180deg,#ef6f5e,#da3c30);width:100%;height:50px;-webkit-box-pack:justify;-ms-flex-pack:justify;justify-content:space-between}._1PcW,._3GIH{display:-webkit-box;display:-ms-flexbox;display:flex;-webkit-box-align:center;-ms-flex-align:center;align-items:center}._3GIH{-webkit-box-orient:horizontal;-webkit-box-direction:normal;-ms-flex-direction:row;flex-direction:row;margin-left:26px;margin-right:26px;background-color:transparent;border:1px solid transparent}._2-zn{margin-left:20px}._2-zn,.HbG5{font-family:Roboto-Medium;font-size:20px;color:#fff;letter-spacing:0;text-align:left}.HbG5{margin-left:10px}._2fd3{width:1px;background-color:#fff;height:34px;margin-right:30px}._3l9z{width:50%;background-color:transparent;resize:none;font-size:15px;outline:none;border-style:none;padding-left:25px;padding-top:25px;padding-right:25px}._27Nc{float:right;width:50%;height:100%;background-color:#fff;box-sizing:border-box}._1YT2{float:left;height:100%;width:100%;overflow-y:auto;padding-left:25px;padding-top:25px;padding-right:25px}._2nn6{background-image:-webkit-gradient(linear,left top,left bottom,from(#ef6f5e),to(#da3c30));background-image:-webkit-linear-gradient(top,#ef6f5e,#da3c30);background-image:linear-gradient(-180deg,#ef6f5e,#da3c30);width:100%;height:60px;font-size:20px;color:#fff}._2Bhl,._2nn6{border:none;outline:none}", ""]);
   
   // exports
   exports.locals = {
-  	"root": "_1r8b",
-  	"center": "BliM",
-  	"header": "_28J4",
-  	"header_wrapper": "uD_P",
-  	"title": "vvC1",
-  	"push_text": "_17KC",
-  	"header_split": "_14cB",
-  	"inputFrame": "LP3A",
-  	"showFrame": "bVxo",
-  	"showFrame_span": "_2i1O",
-  	"button": "mORg",
-  	"inputTitle": "yjnR"
+  	"root": "_3Hr_",
+  	"center": "_1v9E",
+  	"header": "_1PcW",
+  	"header_wrapper": "_3GIH",
+  	"title": "_2-zn",
+  	"push_text": "HbG5",
+  	"header_split": "_2fd3",
+  	"inputFrame": "_3l9z",
+  	"showFrame": "_27Nc",
+  	"showFrame_span": "_1YT2",
+  	"button": "_2nn6",
+  	"inputTitle": "_2Bhl"
   };
 
 /***/ },
@@ -4291,7 +4301,7 @@ module.exports =
   
   var _Add2 = _interopRequireDefault(_Add);
   
-  var _withStyles = __webpack_require__(63);
+  var _withStyles = __webpack_require__(112);
   
   var _withStyles2 = _interopRequireDefault(_withStyles);
   
@@ -4622,9 +4632,9 @@ module.exports =
                   style: { flexDirection: 'row', flex: 1, paddingLeft: "20px", paddingRight: "20px", paddingTop: "20px", display: 'flex' }
               }, void 0, (0, _jsx3.default)('img', {
                   style: { width: '50px', height: '50px', borderRadius: "25px", borderWidth: '1px' },
-                  src: author && author.picture ? author.picture : "http://s1.wacdn.com/wis/6/20124bb62868e77b_195x195.png"
+                  src: author && author.picture ? author.picture : __webpack_require__(120)
               }), (0, _jsx3.default)('div', {
-                  style: { paddingLeft: "10px", fontSize: 18, color: '#000000', display: 'flex', 'align-items': 'center', 'justify-content': 'center' }
+                  style: { paddingLeft: "10px", fontSize: 18, color: '#000000', display: 'flex', alignItems: 'center', justifyContent: 'center' }
               }, void 0, author ? author.displayName : "null"))), (0, _jsx3.default)('div', {
                   style: { paddingLeft: "20px", paddingRight: "20px", paddingBottom: "20px" },
                   dangerouslySetInnerHTML: { __html: (0, _marked2.default)(content) }
@@ -4640,13 +4650,19 @@ module.exports =
 /* 120 */
 /***/ function(module, exports) {
 
-  module.exports = require("./assets");
+  module.exports = "data:image/png;base64,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"
 
 /***/ },
 /* 121 */
+/***/ function(module, exports) {
+
+  module.exports = require("./assets");
+
+/***/ },
+/* 122 */
 /***/ function(module, exports, __webpack_require__) {
 
-  var jade = __webpack_require__(122);
+  var jade = __webpack_require__(123);
   
   module.exports = function template(locals) {
   var buf = [];
@@ -4662,7 +4678,7 @@ module.exports =
   }
 
 /***/ },
-/* 122 */
+/* 123 */
 /***/ function(module, exports, __webpack_require__) {
 
   'use strict';
@@ -4914,10 +4930,10 @@ module.exports =
 
 
 /***/ },
-/* 123 */
+/* 124 */
 /***/ function(module, exports, __webpack_require__) {
 
-  var jade = __webpack_require__(122);
+  var jade = __webpack_require__(123);
   
   module.exports = function template(locals) {
   var buf = [];
