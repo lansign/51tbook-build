@@ -3111,31 +3111,31 @@ module.exports =
           var _this = (0, _possibleConstructorReturn3.default)(this, (0, _getPrototypeOf2.default)(PersonalCenter).call(this, props));
   
           _this.state = {
-              windowWidth: window.innerWidth
+              windowWidth: window && window.innerWidth
           };
   
+          _this.handleResize = _this.handleResize.bind(_this);
           return _this;
       }
   
       (0, _createClass3.default)(PersonalCenter, [{
           key: 'handleResize',
           value: function handleResize(e) {
-              this.setState({ windowWidth: window.innerWidth });
+              this.setState({ windowWidth: window && window.innerWidth });
           }
       }, {
           key: 'componentDidMount',
           value: function componentDidMount() {
-              window.addEventListener('resize', this.handleResize);
+              window && window.addEventListener('resize', this.handleResize);
           }
       }, {
           key: 'componentWillUnmount',
           value: function componentWillUnmount() {
-              window.removeEventListener('resize', this.handleResize);
+              window && window.removeEventListener('resize', this.handleResize);
           }
       }, {
           key: 'render',
           value: function render() {
-              console.log(this.state.windowWidth, window.innerWidth);
               if (this.state.windowWidth < 600) {
                   return null;
               }
