@@ -2832,7 +2832,7 @@ module.exports =
                     'Content-Type': 'application/json'
                   },
                   body: (0, _stringify2.default)({
-                    query: 'query { books { id,title,content,createTime,imageUrl,author {source,sourceId,displayName}} }'
+                    query: 'query { books(recommend:true) { id,title,content,createTime,imageUrl,author {source,sourceId,displayName}} }'
                   }),
                   credentials: 'include'
                 });
