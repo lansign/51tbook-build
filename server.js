@@ -2938,7 +2938,7 @@ module.exports =
       return (0, _jsx3.default)('div', {
           className: _Home2.default.root
       }, void 0, _ref2, (0, _jsx3.default)('div', {
-          style: { maxWidth: '850px', width: '75%', flexDirection: 'column' }
+          style: { maxWidth: '850px', minWidth: '75%', flexDirection: 'column' }
       }, void 0, _ref3, (0, _jsx3.default)('div', {
           className: _Home2.default.container
       }, void 0, (0, _jsx3.default)('ul', {
@@ -3111,7 +3111,7 @@ module.exports =
           var _this = (0, _possibleConstructorReturn3.default)(this, (0, _getPrototypeOf2.default)(PersonalCenter).call(this, props));
   
           _this.state = {
-              windowWidth: window && window.innerWidth
+              windowWidth: 0
           };
   
           _this.handleResize = _this.handleResize.bind(_this);
@@ -3126,6 +3126,10 @@ module.exports =
       }, {
           key: 'componentDidMount',
           value: function componentDidMount() {
+              if (window && this.state.windowWidth != window.innerWidth) {
+                  this.setState({ windowWidth: window.innerWidth });
+              }
+  
               window && window.addEventListener('resize', this.handleResize);
           }
       }, {
