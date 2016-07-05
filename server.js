@@ -1353,8 +1353,8 @@ module.exports =
                   _BookModel2.default.find({ _id: args.id }).populate('author').exec(callback);
               } else {
                   var query = _BookModel2.default.find(args.author ? { author: args.author } : {}).where('createTime').lte(args.createTime ? args.createTime : new Date().getTime());
-                  console.log(args.recommend);
-                  if (args.recommend) {
+                  if (args.recommend === true || args.recommend === false) {
+                      console.log(args.recommend);
                       query = query.where('recommend', args.recommend);
                   }
                   query.sort({ createTime: -1 }).limit(args.size && args.size > 0 && args.size < 500 ? args.size : 500).populate('author').exec(callback);
