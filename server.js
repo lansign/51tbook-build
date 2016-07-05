@@ -2813,11 +2813,12 @@ module.exports =
   
     path: '/',
   
-    action: function action() {
+    action: function action(_ref) {
       var _this = this;
   
+      var context = _ref.context;
       return (0, _asyncToGenerator3.default)(_regenerator2.default.mark(function _callee() {
-        var resp, _ref, data;
+        var resp, _ref2, data;
   
         return _regenerator2.default.wrap(function _callee$(_context) {
           while (1) {
@@ -2842,8 +2843,8 @@ module.exports =
                 return resp.json();
   
               case 5:
-                _ref = _context.sent;
-                data = _ref.data;
+                _ref2 = _context.sent;
+                data = _ref2.data;
   
                 if (!(!data || !data.books)) {
                   _context.next = 9;
@@ -2854,7 +2855,8 @@ module.exports =
   
               case 9:
                 return _context.abrupt('return', (0, _jsx3.default)(_Home2.default, {
-                  books: data.books
+                  books: data.books,
+                  context: context
                 }));
   
               case 10:
@@ -2887,6 +2889,26 @@ module.exports =
   var _jsx2 = __webpack_require__(47);
   
   var _jsx3 = _interopRequireDefault(_jsx2);
+  
+  var _getPrototypeOf = __webpack_require__(50);
+  
+  var _getPrototypeOf2 = _interopRequireDefault(_getPrototypeOf);
+  
+  var _classCallCheck2 = __webpack_require__(51);
+  
+  var _classCallCheck3 = _interopRequireDefault(_classCallCheck2);
+  
+  var _createClass2 = __webpack_require__(52);
+  
+  var _createClass3 = _interopRequireDefault(_createClass2);
+  
+  var _possibleConstructorReturn2 = __webpack_require__(53);
+  
+  var _possibleConstructorReturn3 = _interopRequireDefault(_possibleConstructorReturn2);
+  
+  var _inherits2 = __webpack_require__(54);
+  
+  var _inherits3 = _interopRequireDefault(_inherits2);
   
   var _react = __webpack_require__(48);
   
@@ -2925,39 +2947,64 @@ module.exports =
   
   var title = '技术博客';
   
-  var _ref2 = (0, _jsx3.default)(_PersonalCenter2.default, {});
-  
-  var _ref3 = (0, _jsx3.default)(_Header2.default, {
+  var _ref = (0, _jsx3.default)(_Header2.default, {
       title: '技术博客'
   });
   
-  function Home(_ref, context) {
-      var books = _ref.books;
+  var Home = function (_Component) {
+      (0, _inherits3.default)(Home, _Component);
   
-      context.setTitle(title);
-      return (0, _jsx3.default)('div', {
-          className: _Home2.default.root
-      }, void 0, _ref2, (0, _jsx3.default)('div', {
-          style: { maxWidth: '850px', minWidth: '75%', flexDirection: 'column' }
-      }, void 0, _ref3, (0, _jsx3.default)('div', {
-          className: _Home2.default.container
-      }, void 0, (0, _jsx3.default)('ul', {
-          className: _Home2.default.news
-      }, void 0, books.map(function (item, index) {
-          return (0, _jsx3.default)('li', {
-              className: _Home2.default.newsItem
-          }, index, (0, _jsx3.default)(_Home4.default, {
-              book: item
-          }));
-      }))), (0, _jsx3.default)('a', {
-          href: '/article/add'
-      }, void 0, (0, _jsx3.default)('div', {
-          style: { display: 'flex', position: 'fixed', height: 50, width: 50, backgroundColor: '#d94b40',
-              bottom: 30, right: 40, borderRadius: "25px", borderWidth: '1px', alignItems: 'center', justifyContent: 'center' }
-      }, void 0, (0, _jsx3.default)('img', {
-          src: __webpack_require__(93)
-      })))));
-  }
+  
+      // 构造
+  
+      function Home(props) {
+          (0, _classCallCheck3.default)(this, Home);
+  
+          // 初始状态
+  
+          var _this = (0, _possibleConstructorReturn3.default)(this, (0, _getPrototypeOf2.default)(Home).call(this, props));
+  
+          _this.state = {};
+          return _this;
+      }
+  
+      (0, _createClass3.default)(Home, [{
+          key: 'render',
+          value: function render() {
+              var _this2 = this;
+  
+              this.props.context.setTitle(title);
+              var width = this.state && this.state.isPersonalShow ? '75%' : '100%';
+              return (0, _jsx3.default)('div', {
+                  className: _Home2.default.root
+              }, void 0, (0, _jsx3.default)(_PersonalCenter2.default, {
+                  onVisibleChange: function onVisibleChange(isShow) {
+                      _this2.setState({ isPersonalShow: isShow });
+                  }
+              }), (0, _jsx3.default)('div', {
+                  style: { maxWidth: '850px', width: width, flexDirection: 'column' }
+              }, void 0, _ref, (0, _jsx3.default)('div', {
+                  className: _Home2.default.container
+              }, void 0, (0, _jsx3.default)('ul', {
+                  className: _Home2.default.news
+              }, void 0, this.props.books.map(function (item, index) {
+                  return (0, _jsx3.default)('li', {
+                      className: _Home2.default.newsItem
+                  }, index, (0, _jsx3.default)(_Home4.default, {
+                      book: item
+                  }));
+              }))), (0, _jsx3.default)('a', {
+                  href: '/article/add'
+              }, void 0, (0, _jsx3.default)('div', {
+                  style: { display: 'flex', position: 'fixed', height: 50, width: 50, backgroundColor: '#d94b40',
+                      bottom: 30, right: 40, borderRadius: "25px", borderWidth: '1px', alignItems: 'center', justifyContent: 'center' }
+              }, void 0, (0, _jsx3.default)('img', {
+                  src: __webpack_require__(93)
+              })))));
+          }
+      }]);
+      return Home;
+  }(_react.Component);
   
   Home.contextTypes = { setTitle: _react.PropTypes.func.isRequired };
   
@@ -3122,12 +3169,15 @@ module.exports =
           key: 'handleResize',
           value: function handleResize(e) {
               this.setState({ windowWidth: window && window.innerWidth });
+              if (this.props.onVisibleChange) {
+                  this.props.onVisibleChange();
+              }
           }
       }, {
           key: 'componentDidMount',
           value: function componentDidMount() {
               if (window && this.state.windowWidth != window.innerWidth) {
-                  this.setState({ windowWidth: window.innerWidth });
+                  this.handleResize();
               }
   
               window && window.addEventListener('resize', this.handleResize);
