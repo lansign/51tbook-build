@@ -1490,7 +1490,8 @@ module.exports =
           imageUrl: { type: _graphql.GraphQLString },
           thumbnailUrl: { type: _graphql.GraphQLString },
           summary: { type: _graphql.GraphQLString },
-          content: { type: new _graphql.GraphQLNonNull(_graphql.GraphQLString) }
+          content: { type: new _graphql.GraphQLNonNull(_graphql.GraphQLString) },
+          recommend: { type: _graphql.GraphQLBoolean }
       },
   
       resolve: function resolve(root, args) {
@@ -1525,6 +1526,9 @@ module.exports =
                           book.summary = args.summary;
                           book.content = args.content;
                           book.editTime = time.getTime();
+                          if (book.isAdmin) {
+                              book.recommend = args.recommend;
+                          }
                           book.save(function (err) {
                               if (err) {
                                   reject(err);
