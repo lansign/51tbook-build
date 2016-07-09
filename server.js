@@ -1551,15 +1551,32 @@ module.exports =
                               if (err) {
                                   reject(err);
                               } else if (book && (user.isAdmin || book.author === root.request.user._doc._id)) {
-                                  book.title = args.title;
-                                  book.imageUrl = args.imageUrl;
-                                  book.thumbnailUrl = args.thumbnailUrl;
-                                  book.summary = args.summary;
-                                  book.content = args.content;
+                                  if (args.title) {
+                                      book.title = args.title;
+                                  }
+  
+                                  if (args.imageUrl) {
+                                      book.imageUrl = args.imageUrl;
+                                  }
+  
+                                  if (args.thumbnailUrl) {
+                                      book.thumbnailUrl = args.thumbnailUrl;
+                                  }
+  
+                                  if (args.summary) {
+                                      book.summary = args.summary;
+                                  }
+  
+                                  if (args.content) {
+                                      book.content = args.content;
+                                  }
+  
                                   book.editTime = time.getTime();
+  
                                   if (user.isAdmin) {
                                       book.recommend = args.recommend;
                                   }
+  
                                   book.save(function (err) {
                                       if (err) {
                                           reject(err);
