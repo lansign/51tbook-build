@@ -1511,11 +1511,11 @@ module.exports =
       type: _article2.default,
       args: {
           id: { type: _graphql.GraphQLID },
-          title: { type: new _graphql.GraphQLNonNull(_graphql.GraphQLString) },
+          title: { type: _graphql.GraphQLString },
           imageUrl: { type: _graphql.GraphQLString },
           thumbnailUrl: { type: _graphql.GraphQLString },
           summary: { type: _graphql.GraphQLString },
-          content: { type: new _graphql.GraphQLNonNull(_graphql.GraphQLString) },
+          content: { type: _graphql.GraphQLString },
           recommend: { type: _graphql.GraphQLBoolean }
       },
   
