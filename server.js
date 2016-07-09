@@ -1688,7 +1688,7 @@ module.exports =
               _UserModel2.default.findById(root.request.user._doc._id, function (err, user) {
                   if (err) {
                       reject(err);
-                  } else if (!user) {
+                  } else if (!user || !user.isAdmin) {
                       reject(new Error("您没有权限!"));
                   } else {
                       _UserModel2.default.findById(args.userId, function (err, modifyUser) {
