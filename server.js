@@ -4863,7 +4863,7 @@ module.exports =
       return Detail;
   }(_react2.default.Component);
   
-  exports.default = (0, _withStyles2.default)(_Detail2.default)(Detail);
+  exports.default = Detail;
 
 /***/ },
 /* 121 */
