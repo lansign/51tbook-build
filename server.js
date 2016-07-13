@@ -3245,7 +3245,7 @@ module.exports =
           style: { height: 50, width: 50, position: 'absolute', textAlign: 'center' }
       }, void 0, (0, _jsx3.default)('img', {
           src: __webpack_require__(90),
-          style: { width: auto, heigth: auto, marginTop: 13 }
+          style: { marginTop: 13 }
       })) : null, title ? (0, _jsx3.default)('div', {
           style: { flex: 1, textAlign: 'center',
               fontSize: 20,
@@ -4880,7 +4880,7 @@ module.exports =
   var jade_mixins = {};
   var jade_interp;
   ;var locals_for_with = (locals || {});(function (body, css, description, entry, title, trackingId) {
-  buf.push("<!DOCTYPE html><html lang=\"\" class=\"no-js\"><head><meta charset=\"utf-8\"><meta http-equiv=\"x-ua-compatible\" content=\"ie=edge\"><title>" + (jade.escape(null == (jade_interp = title) ? "" : jade_interp)) + "</title><meta name=\"description\"" + (jade.attr("description", description, true, true)) + "><meta name=\"viewport\" content=\"width=device-width, initial-scale=1\"><link rel=\"apple-touch-icon\" href=\"apple-touch-icon.png\"><link rel=\"stylesheet\" href=\"bootstrap.min.css\"><style id=\"css\">" + (null == (jade_interp = css) ? "" : jade_interp) + "</style></head><body style=\"margin:0\"><div id=\"app\" style=\"height:100%\">" + (null == (jade_interp = body) ? "" : jade_interp) + "</div><script" + (jade.attr("src", entry, true, true)) + "></script><script>window.ga=function(){ga.q.push(arguments)};ga.q=[];ga.l=+new Date;\nga('create','" + (jade.escape((jade_interp = trackingId) == null ? '' : jade_interp)) + "','auto');ga('send','pageview')</script>");
+  buf.push("<!DOCTYPE html><html lang=\"\" class=\"no-js\"><head><meta charset=\"utf-8\"><meta http-equiv=\"x-ua-compatible\" content=\"ie=edge\"><title>" + (jade.escape(null == (jade_interp = title) ? "" : jade_interp)) + "</title><meta name=\"description\"" + (jade.attr("description", description, true, true)) + "><meta name=\"viewport\" content=\"width=device-width, initial-scale=1\"><link rel=\"apple-touch-icon\" href=\"apple-touch-icon.png\"><link rel=\"stylesheet\" href=\"http://cdn.bootcss.com/bootstrap/3.3.2/css/bootstrap.min.css\"><style id=\"css\">" + (null == (jade_interp = css) ? "" : jade_interp) + "</style></head><body style=\"margin:0\"><div id=\"app\" style=\"height:100%\">" + (null == (jade_interp = body) ? "" : jade_interp) + "</div><script" + (jade.attr("src", entry, true, true)) + "></script><script>window.ga=function(){ga.q.push(arguments)};ga.q=[];ga.l=+new Date;\nga('create','" + (jade.escape((jade_interp = trackingId) == null ? '' : jade_interp)) + "','auto');ga('send','pageview')</script>");
   if ( trackingId)
   {
   buf.push("<script src=\"https://www.google-analytics.com/analytics.js\" async defer></script>");
