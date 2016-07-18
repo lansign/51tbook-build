@@ -108,7 +108,7 @@ module.exports =
   
   var _routes2 = _interopRequireDefault(_routes);
   
-  var _assets = __webpack_require__(122);
+  var _assets = __webpack_require__(124);
   
   var _assets2 = _interopRequireDefault(_assets);
   
@@ -205,7 +205,7 @@ module.exports =
                       case 0:
                         css = [];
                         statusCode = 200;
-                        template = __webpack_require__(123); // eslint-disable-line global-require
+                        template = __webpack_require__(125); // eslint-disable-line global-require
   
                         data = { title: '', description: '', css: '', body: '', entry: _assets2.default.main.js };
   
@@ -296,7 +296,7 @@ module.exports =
   app.use(function (err, req, res, next) {
     // eslint-disable-line no-unused-vars
     console.log(pe.render(err)); // eslint-disable-line no-console
-    var template = __webpack_require__(125); // eslint-disable-line global-require
+    var template = __webpack_require__(127); // eslint-disable-line global-require
     var statusCode = err.status || 500;
     res.status(statusCode);
     res.send(template({
@@ -3245,7 +3245,7 @@ module.exports =
           style: { height: 50, width: 50, position: 'absolute', textAlign: 'center' }
       }, void 0, (0, _jsx3.default)('img', {
           src: __webpack_require__(90),
-          style: { marginTop: 13 }
+          style: { height: 'auto', width: 'auto', marginTop: 13 }
       })) : null, title ? (0, _jsx3.default)('div', {
           style: { flex: 1, textAlign: 'center',
               fontSize: 20,
@@ -3327,7 +3327,7 @@ module.exports =
           value: function handleResize(e) {
               this.setState({ windowWidth: window && window.innerWidth });
               if (this.props.onVisibleChange) {
-                  this.props.onVisibleChange();
+                  this.props.onVisibleChange(this.state.windowWidth >= 600);
               }
           }
       }, {
@@ -4694,6 +4694,10 @@ module.exports =
   
   var _fetch2 = _interopRequireDefault(_fetch);
   
+  var _App = __webpack_require__(50);
+  
+  var _App2 = _interopRequireDefault(_App);
+  
   function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
   
   exports.default = {
@@ -4743,10 +4747,12 @@ module.exports =
                               throw new Error('Failed to load the news feed.');
   
                           case 9:
-                              return _context.abrupt('return', render((0, _jsx3.default)(_Detail2.default, {
+                              return _context.abrupt('return', render((0, _jsx3.default)(_App2.default, {
+                                  context: context
+                              }, void 0, (0, _jsx3.default)(_Detail2.default, {
                                   data: data.books[0],
                                   context: context
-                              })));
+                              }))));
   
                           case 10:
                           case 'end':
@@ -4808,6 +4814,14 @@ module.exports =
   
   var _marked2 = _interopRequireDefault(_marked);
   
+  var _withStyles = __webpack_require__(113);
+  
+  var _withStyles2 = _interopRequireDefault(_withStyles);
+  
+  var _Detail = __webpack_require__(121);
+  
+  var _Detail2 = _interopRequireDefault(_Detail);
+  
   function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
   
   var _ref = (0, _jsx3.default)(_Header2.default, {
@@ -4832,6 +4846,7 @@ module.exports =
               var createTime = _props$data.createTime;
               var author = _props$data.author;
   
+              this.props.context.setTitle(title);
               var date = new Date(createTime || 0);
   
               return (0, _jsx3.default)('div', {}, void 0, _ref, (0, _jsx3.default)('div', {
@@ -4843,7 +4858,7 @@ module.exports =
                   style: { flexDirection: 'row', flex: 1, paddingLeft: "20px", paddingRight: "20px", paddingTop: "20px", display: 'flex' }
               }, void 0, (0, _jsx3.default)('img', {
                   style: { width: '50px', height: '50px', borderRadius: "25px", borderWidth: '1px' },
-                  src: author && author.picture ? author.picture : __webpack_require__(121)
+                  src: author && author.picture ? author.picture : __webpack_require__(123)
               }), (0, _jsx3.default)('div', {
                   style: { paddingLeft: "10px", fontSize: 18, color: '#000000', display: 'flex', alignItems: 'center', justifyContent: 'center' }
               }, void 0, author ? author.displayName : "null"))), (0, _jsx3.default)('div', {
@@ -4855,25 +4870,69 @@ module.exports =
       return Detail;
   }(_react2.default.Component);
   
-  exports.default = Detail;
+  exports.default = (0, _withStyles2.default)(_Detail2.default)(Detail);
 
 /***/ },
 /* 121 */
+/***/ function(module, exports, __webpack_require__) {
+
+  
+      var content = __webpack_require__(122);
+      var insertCss = __webpack_require__(60);
+  
+      if (typeof content === 'string') {
+        content = [[module.id, content, '']];
+      }
+  
+      module.exports = content.locals || {};
+      module.exports._getCss = function() { return content.toString(); };
+      module.exports._insertCss = function(options) { return insertCss(content, options) };
+    
+
+/***/ },
+/* 122 */
+/***/ function(module, exports, __webpack_require__) {
+
+  exports = module.exports = __webpack_require__(59)();
+  // imports
+  
+  
+  // module
+  exports.push([module.id, "body,html{font-family:Arial,Segoe UI,HelveticaNeue-Light,sans-serif;height:100%;background:#e9e9e9}img{border:0;width:100%;height:auto}._1afx{-webkit-box-orient:vertical;-ms-flex-direction:column;flex-direction:column}._1afx,._2iIu{display:-webkit-box;display:-ms-flexbox;display:flex;height:100%;-webkit-box-direction:normal}._2iIu{-webkit-box-orient:horizontal;-ms-flex-direction:row;flex-direction:row}._2m1s{background-image:-webkit-gradient(linear,left top,left bottom,from(#ef6f5e),to(#da3c30));background-image:-webkit-linear-gradient(top,#ef6f5e,#da3c30);background-image:linear-gradient(-180deg,#ef6f5e,#da3c30);width:100%;height:50px;-webkit-box-pack:justify;-ms-flex-pack:justify;justify-content:space-between}._2m1s,._3j5Q{display:-webkit-box;display:-ms-flexbox;display:flex;-webkit-box-align:center;-ms-flex-align:center;align-items:center}._3j5Q{-webkit-box-orient:horizontal;-webkit-box-direction:normal;-ms-flex-direction:row;flex-direction:row;margin-left:26px;margin-right:26px;background-color:transparent;border:1px solid transparent}.qqDT{margin-left:20px}._3ciD,.qqDT{font-family:Roboto-Medium;font-size:20px;color:#fff;letter-spacing:0;text-align:left}._3ciD{margin-left:10px}._3tyi{width:1px;background-color:#fff;height:34px;margin-right:30px}._2K-n{width:50%;background-color:transparent;resize:none;font-size:15px;outline:none;border-style:none;padding-left:25px;padding-top:25px;padding-right:25px}.pfYk{float:right;width:50%;height:100%;background-color:#fff;box-sizing:border-box}._1aVq{float:left;height:100%;width:100%;overflow-y:auto;padding-left:25px;padding-top:25px;padding-right:25px}.PYY4{background-image:-webkit-gradient(linear,left top,left bottom,from(#ef6f5e),to(#da3c30));background-image:-webkit-linear-gradient(top,#ef6f5e,#da3c30);background-image:linear-gradient(-180deg,#ef6f5e,#da3c30);width:100%;height:60px;font-size:20px;color:#fff}._2Z4I,.PYY4{border:none;outline:none}", ""]);
+  
+  // exports
+  exports.locals = {
+  	"root": "_1afx",
+  	"center": "_2iIu",
+  	"header": "_2m1s",
+  	"header_wrapper": "_3j5Q",
+  	"title": "qqDT",
+  	"push_text": "_3ciD",
+  	"header_split": "_3tyi",
+  	"inputFrame": "_2K-n",
+  	"showFrame": "pfYk",
+  	"showFrame_span": "_1aVq",
+  	"button": "PYY4",
+  	"inputTitle": "_2Z4I"
+  };
+
+/***/ },
+/* 123 */
 /***/ function(module, exports) {
 
   module.exports = "data:image/png;base64,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"
 
 /***/ },
-/* 122 */
+/* 124 */
 /***/ function(module, exports) {
 
   module.exports = require("./assets");
 
 /***/ },
-/* 123 */
+/* 125 */
 /***/ function(module, exports, __webpack_require__) {
 
-  var jade = __webpack_require__(124);
+  var jade = __webpack_require__(126);
   
   module.exports = function template(locals) {
   var buf = [];
@@ -4889,7 +4948,7 @@ module.exports =
   }
 
 /***/ },
-/* 124 */
+/* 126 */
 /***/ function(module, exports, __webpack_require__) {
 
   'use strict';
@@ -5141,10 +5200,10 @@ module.exports =
 
 
 /***/ },
-/* 125 */
+/* 127 */
 /***/ function(module, exports, __webpack_require__) {
 
-  var jade = __webpack_require__(124);
+  var jade = __webpack_require__(126);
   
   module.exports = function template(locals) {
   var buf = [];
